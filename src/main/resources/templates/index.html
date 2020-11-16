@@ -13,34 +13,30 @@
     <title>Губернский Печатный Двор</title>
 </head>
 <body>
-<nav class="navigation-bar-desktop">
-    <a href="feedback.html" class="navigation-bar-item">Жалобная книга</a>
-    <a href="news" class="navigation-bar-item">Вести двора</a>
-    <p class="navigation-bar-logo-desktop">Губернский Печатный Двор</p>
-    <a href="cabinet" class="navigation-bar-item">Кабинет</a>
-    <a href="logout" class="navigation-bar-item">Выход</a>
-</nav>
-
-<!--Navbar-->
-<nav class="navbar navbar-light light-blue lighten-4">
-    <!-- Navbar brand -->
-    <span class="navbar-brand">Губернский Печатный Двор</span>
-    <!-- Collapse button -->
-    <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent1"
-            aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span
-            class="dark-blue-text"><i
-            class="fas fa-bars fa-1x"></i></span></button>
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-        <!-- Links -->
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item ">
-                <a class="nav-link" href="#">Жалобная книга <span class="sr-only"></span></a>
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">Губернский Печатный Двор</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Жалобная книга<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Вести двора</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link hidden nav-right" href="#">Кабинет</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link hidden nav-right" href="#">Выход</a>
+            </li>
+        </ul>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end">
+        <ul class="nav navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" href="#">Кабинет</a>
             </li>
@@ -48,12 +44,8 @@
                 <a class="nav-link" href="#">Выход</a>
             </li>
         </ul>
-        <!-- Links -->
     </div>
-    <!-- Collapsible content -->
-
 </nav>
-<!--/.Navbar-->
 <div class="navigation-bar-divider"></div>
 <section id="section-title">
     <p id="section-title-header">Современное решение<br>проблем насущных</p>
