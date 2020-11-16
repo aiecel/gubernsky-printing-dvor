@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url:
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  security:
+    oauth2:
+      client:
+        registration:
+          vk:
+            client-name: vk
+            client-id: 7616608
+            client-secret: 9PzKyaveI2YSblYIHZXG
+            provider: vk
+            redirect-uri: http://localhost:8080/login/oauth2/code/vk
+            authorization-grant-type: authorization_code
+            client-authentication-method: form
+            scope: email
+
+        provider:
+          vk:
+            authorization-uri: https://oauth.vk.com/authorize
+            token-uri: https://oauth.vk.com/access_token?client_secret=9PzKyaveI2YSblYIHZXG
+            user-info-uri: https://api.vk.com/method/users.get?v=5.52&{user_id}
+            user-name-attribute: user_id
