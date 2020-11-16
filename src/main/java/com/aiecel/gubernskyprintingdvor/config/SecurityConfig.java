@@ -2,6 +2,7 @@ package com.aiecel.gubernskyprintingdvor.config;
 
 import com.aiecel.gubernskyprintingdvor.security.CustomOAuth2UserService;
 import com.aiecel.gubernskyprintingdvor.security.CustomTokenResponseConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -21,6 +22,13 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -33,15 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService())
+                .userService(customOAuth2UserService)
                 .and()
                 .tokenEndpoint()
                 .accessTokenResponseClient(accessTokenResponseClient());
-    }
-
-    @Bean
-    public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService();
     }
 
     @Bean

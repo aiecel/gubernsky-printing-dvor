@@ -34,7 +34,6 @@ public class VkOAuth2UserLoader {
             Map<String, Object> response = (Map<String, Object>) entity.getBody();
             ArrayList<LinkedHashMap<String, Object>> valueList = (ArrayList<LinkedHashMap<String, Object>>) response.get("response");
             Map<String, Object> userAttributes = valueList.get(0);
-            userAttributes.put("id", oAuth2UserRequest.getAdditionalParameters().get("id"));
             Set<GrantedAuthority> authorities = Collections.singleton(new OAuth2UserAuthority(userAttributes));
             return new DefaultOAuth2User(authorities, userAttributes, "first_name");
         } catch (HttpClientErrorException ex) {
