@@ -14,19 +14,23 @@ import java.util.Map;
 @Component
 public class VkChatter implements Chatter<Message> {
     private final VkUserService vkUserService;
+    private final VkMessageHandler defaultMessageHandler;
     private final Map<Integer, MessageHandler<Message>> messageHandlers;
 
     @Autowired
-    public VkChatter(VkUserService vkUserService) {
+    public VkChatter(VkUserService vkUserService, VkMessageHandler defaultMessageHandler) {
         this.vkUserService = vkUserService;
+        this.defaultMessageHandler = defaultMessageHandler;
         this.messageHandlers = new HashMap<>();
     }
 
     @Override
     public Message getAnswer(Message message) {
         if (!messageHandlers.containsKey(message.getFromId())) {
-            messageHandlers.put(message.getFromId(), new HomeVkMessageHandler());
-            vkUserService.registerVkUser(message.getFromId());
+            messageHandlers.put(message.getFromId(), defaultMessageHandler);
+            if (!vkUserService.isVkUserExists(message.getFromId())) {
+                vkUserService.registerVkUser(message.getFromId());
+            }
         }
 
         BotResponse<Message> response = messageHandlers.get(message.getFromId()).getResponse(message);
