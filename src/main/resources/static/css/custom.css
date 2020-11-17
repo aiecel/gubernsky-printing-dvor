@@ -1,9 +1,26 @@
-.navbar {
+button:focus {
+    outline: none;
+}
+
+.hidden {
     display: none;
 }
 
-button:focus {
-    outline: none;
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-family: Oranienbaum, serif;
+    user-select: none;
+}
+
+.nav-link {
+    white-space: nowrap;
+}
+
+.navbar-nav > li{
+    padding-left: .68em;
+    padding-right: .68em;
+    font-size: 1.1rem;
 }
 
 .navbar-light .navbar-toggler {
@@ -11,35 +28,32 @@ button:focus {
     color: #1d1d1f;
 }
 
-@media (max-width: 1000px) {
-    .navbar {
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    text-decoration: underline;
+    color: #1d1d1f;
+}
+
+@media (max-width: 991.78px) {
+    .hidden {
         display: flex;
-    }
-
-    .navbar-brand {
-        font-size: 1.8rem;
-        font-weight: bold;
-    }
-
-    .navbar-light .navbar-nav .nav-link {
-        color: #1d1d1f;
-    }
-
-    .navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
-        text-decoration: underline;
-        color: #1d1d1f;
     }
 }
 
 @media (max-width: 470px) {
     .navbar-brand {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
 }
 
-@media (max-width: 310px) {
+@media (max-width: 350px) {
     .navbar-brand {
-        font-size: 0.7em;
+        font-size: 1.1em;
         margin-right: 0;
+    }
+}
+
+@media (max-width: 300px) {
+    .navbar-brand {
+        font-size: 0.9em;
     }
 }

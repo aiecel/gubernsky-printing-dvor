@@ -8,42 +8,6 @@ section {
 }
 
 /* Navigation bar */
-
-.navigation-bar-desktop {
-    display: inline-grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0;
-    padding: 0.8em 0 0.8em 0;
-    width: 100%;
-    white-space: nowrap;
-}
-
-.navigation-bar-desktop > a {
-    text-align: center;
-    color: #1d1d1f;
-    font-size: 1.4em;
-    margin: auto;
-}
-
-.navigation-bar-item:hover {
-    color: #1d1d1f;
-}
-
-.navbar-brand {
-    font-family: Oranienbaum, serif;
-    font-size: 1.8em;
-    user-select: none;
-}
-
-.navigation-bar-logo-desktop {
-    margin: auto;
-    text-align: center;
-    font-family: Oranienbaum, serif;
-    font-size: 1.8em;
-    font-weight: bold;
-    white-space: nowrap;
-    user-select: none;
-}
-
 .navigation-bar-divider {
     border-bottom: solid black 1px;
     margin-left: 0.5em;
@@ -73,20 +37,6 @@ section {
     font-size: 2.8vmin;
     white-space: nowrap;
     color: #0052a3;
-}
-
-@media (max-width: 1000px) {
-    .navigation-bar-desktop {
-        display: none;
-    }
-
-    .navigation-bar-logo-desktop {
-        display: none;
-    }
-
-    .navigation-bar-desktop > a {
-        display: none;
-    }
 }
 
 /* Feedback */
