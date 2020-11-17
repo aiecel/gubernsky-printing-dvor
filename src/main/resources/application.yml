@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/typographyvk
     username: postgres
-    password: ZKpULI8xoj
+    password: postgres
 
   jpa:
     hibernate:

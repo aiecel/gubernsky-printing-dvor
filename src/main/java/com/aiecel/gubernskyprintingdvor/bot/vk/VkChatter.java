@@ -1,6 +1,5 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk;
 
-import com.aiecel.gubernskyprintingdvor.bot.BotResponse;
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
 import com.aiecel.gubernskyprintingdvor.bot.MessageHandler;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
@@ -26,19 +25,22 @@ public class VkChatter implements Chatter<Message> {
     @Override
     public Message getAnswer(Message message) {
         if (!messageHandlers.containsKey(message.getFromId())) {
-            messageHandlers.put(message.getFromId(), getHomeVkMessageHandler());
+            setMessageHandler(message.getFromId(), getDefaultMessageHandler());
             if (!vkUserService.isVkUserExists(message.getFromId())) {
                 vkUserService.registerVkUser(message.getFromId());
             }
         }
+        return messageHandlers.get(message.getFromId()).onMessage(message, this);
+    }
 
-        BotResponse<Message> response = messageHandlers.get(message.getFromId()).getResponse(message);
+    @Override
+    public void setMessageHandler(Integer user, MessageHandler<Message> messageHandler) {
+        messageHandlers.put(user, messageHandler);
+    }
 
-        if (response.hasNewMessageHandler()) {
-            messageHandlers.put(message.getFromId(), response.getNewMessageHandler());
-        }
-
-        return response.getMessage();
+    @Override
+    public MessageHandler<Message> getDefaultMessageHandler() {
+        return getHomeVkMessageHandler();
     }
 
     @Lookup

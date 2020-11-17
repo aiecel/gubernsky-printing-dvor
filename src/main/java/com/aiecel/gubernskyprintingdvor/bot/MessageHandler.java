@@ -1,5 +1,10 @@
 package com.aiecel.gubernskyprintingdvor.bot;
 
-public interface MessageHandler<M> {
-    BotResponse<M> getResponse(M message);
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public abstract class MessageHandler<M> {
+    public abstract M onMessage(M message, Chatter<M> chatter);
 }
