@@ -41,13 +41,19 @@ button:focus {
 
 @media (max-width: 470px) {
     .navbar-brand {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
 }
 
-@media (max-width: 325px) {
+@media (max-width: 350px) {
     .navbar-brand {
-        font-size: 0.7em;
+        font-size: 1.1em;
         margin-right: 0;
+    }
+}
+
+@media (max-width: 300px) {
+    .navbar-brand {
+        font-size: 0.9em;
     }
 }
