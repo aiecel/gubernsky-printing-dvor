@@ -29,3 +29,8 @@ spring:
             token-uri: https://oauth.vk.com/access_token?client_secret=9PzKyaveI2YSblYIHZXG
             user-info-uri: https://api.vk.com/method/users.get?v=5.52&{user_id}
             user-name-attribute: user_id
+
+logging:
+  level:
+    com.vk.api.sdk.httpclient: error
+    root: info
