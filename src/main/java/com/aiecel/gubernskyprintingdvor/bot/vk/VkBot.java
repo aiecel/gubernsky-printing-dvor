@@ -65,7 +65,6 @@ public class VkBot {
             messages.forEach(userMessage -> {
                 //check if the message was not from the bot
                 if (!userMessage.isOut()) {
-                    log.info("Message received from id {}: {}", userMessage.getFromId(), userMessage.getText());
                     try {
                         sendMessage(userMessage.getFromId(), chatter.getAnswer(userMessage));
                     } catch (ClientException | ApiException e) {
@@ -86,8 +85,6 @@ public class VkBot {
         sendQuery
                 .userId(toUserId)
                 .randomId(random.nextInt(Integer.MAX_VALUE));
-
-        //todo response from bot instead of Message class
 
         //text
         sendQuery.message(message.getText());

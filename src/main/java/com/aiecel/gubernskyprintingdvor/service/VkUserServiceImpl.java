@@ -8,12 +8,14 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.Fields;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class VkUserServiceImpl implements VkUserService {
     private final VkApiClient vkApiClient;
     private final GroupActor groupActor;
@@ -53,5 +55,6 @@ public class VkUserServiceImpl implements VkUserService {
     @Override
     public void registerVkUser(VkUser user) {
         vkUserRepository.save(user);
+        log.info("Registered new VK user: {}", user);
     }
 }
