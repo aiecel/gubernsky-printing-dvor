@@ -6,6 +6,7 @@ import com.aiecel.gubernskyprintingdvor.bot.MessageHandler;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.objects.messages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,20 +15,18 @@ import java.util.Map;
 @Component
 public class VkChatter implements Chatter<Message> {
     private final VkUserService vkUserService;
-    private final VkMessageHandler defaultMessageHandler;
     private final Map<Integer, MessageHandler<Message>> messageHandlers;
 
     @Autowired
-    public VkChatter(VkUserService vkUserService, VkMessageHandler defaultMessageHandler) {
+    public VkChatter(VkUserService vkUserService) {
         this.vkUserService = vkUserService;
-        this.defaultMessageHandler = defaultMessageHandler;
         this.messageHandlers = new HashMap<>();
     }
 
     @Override
     public Message getAnswer(Message message) {
         if (!messageHandlers.containsKey(message.getFromId())) {
-            messageHandlers.put(message.getFromId(), defaultMessageHandler);
+            messageHandlers.put(message.getFromId(), getHomeVkMessageHandler());
             if (!vkUserService.isVkUserExists(message.getFromId())) {
                 vkUserService.registerVkUser(message.getFromId());
             }
@@ -40,5 +39,10 @@ public class VkChatter implements Chatter<Message> {
         }
 
         return response.getMessage();
+    }
+
+    @Lookup
+    public HomeVkMessageHandler getHomeVkMessageHandler() {
+        return null;
     }
 }
