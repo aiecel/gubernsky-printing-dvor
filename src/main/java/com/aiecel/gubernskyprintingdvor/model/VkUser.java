@@ -24,4 +24,9 @@ public class VkUser extends User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Override
+    public String toString() {
+        return "VK User: " + firstName + " " + lastName + ", vk id = " + vkId;
+    }
 }
