@@ -14,17 +14,17 @@ import java.util.List;
 @Scope("prototype")
 public class FeedbackVkMessageHandler extends VkMessageHandler {
     public static final String DEFAULT_MESSAGE =
-            "Есть предложения по улучшению Печатного Двора?\n" +
-                    "Не понравилось обслуживание?\n" +
-                    "Просто хотите написать гадостей?\n\n" +
-                    "Напишите же сюда ваши думы!";
+            "Имеити благосовѣтіе для Двора Печатнаго?\n" +
+                    "Огорчалися чѣмъ то ,\n" +
+                    "али шаленьство настигло?\n\n" +
+                    "Дакъ не робѣй, да пиши же намъ поскорѣй!";
 
-    public static final String MESSAGE_CONFIRM_SENDING = "Отправить всё это мездникам двора? Если хотiте что-то ещё добавить - дак пишите же!";
-    public static final String MESSAGE_CANCEL_SENDING = "Если же захотите впредь что-то написать намъ - вы знаете как!";
-    public static final String MESSAGE_FEEDBACK_SENT = "Жалоба отправлена! Благодаримъ васъ за ваше мненiе";
+    public static final String MESSAGE_CONFIRM_SENDING = "Предпослати всё это мездникамъ двора?\n Коли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
+    public static final String MESSAGE_CANCEL_SENDING = "Ну, такъ тому и бывати! Ваше воленіе для Двора превыше всего!";
+    public static final String MESSAGE_FEEDBACK_SENT = "Жалоба отослана!\nЕжели надобность имѣется что болѣ сдѣлати во Дворѣ, благопослушливо готовы помогати въ дѣлахъ вашихъ";
 
-    public static final String ACTION_BACK_TO_HOME_HANDLER = "Не буду жаловаться";
-    public static final String ACTION_CONFIRM_SENDING = "Отправить!";
+    public static final String ACTION_BACK_TO_HOME_HANDLER = "Повремените, не посылайте мои писмя";
+    public static final String ACTION_CONFIRM_SENDING = "Послати!";
 
     private final FeedbackService feedbackService;
     private final StringBuilder feedbackTextBuilder;
