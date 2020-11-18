@@ -42,7 +42,7 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
             return constructVkMessage(MESSAGE_CANCEL_SENDING, HomeVkMessageHandler.keyboard());
         }
 
-        if (message.getText().equals(ACTION_CONFIRM_SENDING)) {
+        if (message.getText().equals(ACTION_CONFIRM_SENDING) && feedbackTextBuilder.length() > 0) {
             //confirm sending
             feedbackService.save(feedbackTextBuilder.toString());
             chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
