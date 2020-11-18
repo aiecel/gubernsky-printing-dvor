@@ -26,8 +26,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             @SuppressWarnings("ConstantConditions")
             int vkId = oAuth2User.getAttribute("id");
 
-            if (!vkUserService.isVkUserExists(vkId)) {
-                vkUserService.registerVkUser(
+            if (!vkUserService.isUserExists(vkId)) {
+                vkUserService.register(
                         new VkUser(vkId,
                                 oAuth2User.getAttribute("first_name"),
                                 oAuth2User.getAttribute("last_name")
