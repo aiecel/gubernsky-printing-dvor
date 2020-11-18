@@ -15,15 +15,15 @@ import java.util.List;
 public class FeedbackVkMessageHandler extends VkMessageHandler {
     public static final String DEFAULT_MESSAGE =
             "Имеити благосовѣтіе для Двора Печатнаго?\n" +
-                    "Огорчалися чѣмъ то ,\n" +
-                    "али шаленьство настигло?\n\n" +
+                    "Огорчалися чѣмъ то,\n" +
+                    "али шаленьство настигло?\n" +
                     "Дакъ не робѣй, да пиши же намъ поскорѣй!";
 
     public static final String MESSAGE_CONFIRM_SENDING = "Предпослати всё это мездникамъ двора?\n Коли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
-    public static final String MESSAGE_CANCEL_SENDING = "Ну, такъ тому и бывати! Ваше воленіе для Двора превыше всего!";
+    public static final String MESSAGE_CANCEL_SENDING = "Ну, такъ тому и бывати!/nЕжели надобность имѣется что болѣ сдѣлати во Дворѣ, благопослушливо готовы помогати въ дѣлахъ вашихъ";
     public static final String MESSAGE_FEEDBACK_SENT = "Жалоба отослана!\nЕжели надобность имѣется что болѣ сдѣлати во Дворѣ, благопослушливо готовы помогати въ дѣлахъ вашихъ";
 
-    public static final String ACTION_BACK_TO_HOME_HANDLER = "Повремените, не посылайте мои писмя";
+    public static final String ACTION_BACK_TO_HOME_HANDLER = "Пока не отсылати";
     public static final String ACTION_CONFIRM_SENDING = "Послати!";
 
     private final FeedbackService feedbackService;
