@@ -41,38 +41,95 @@ section {
 
 /* Feedback */
 
-#feedback-container {
-    margin-top: 2em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.feedback-container {
+    display: grid;
+    grid-template-rows: 1fr 1fr auto;
     align-items: center;
+    justify-items: center;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 1.5em;
+    text-align: center;
 }
 
 .feedback-article {
-    text-align: center;
-    font-size: 1.5em;
+    display: flex;
+    align-self: end;
+    font-size: 1.4vw;
+    margin-bottom: 1em;
+    width: 40vw;
 }
 
 #feedback-form {
-    display: flex;
-    margin-top: 1em;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    align-items: start;
+    width: 40vw;
 }
 
 #feedback-text {
-    min-height: 30vmin;
-    max-height: 100vmin;
-    width: 60vmin;
-}
-
-textarea {
+    width: 100%;
+    min-height: 10vw;
     outline: none;
 }
 
-#feedback-button {
-    margin-top: 0.7em;
+.feedback-button {
+    margin-top: 1em;
+    width: 20vw;
+    font-size: 1.2vw;
+}
+
+.feedback-header {
+    font-size: 4vw;
+}
+
+@media (max-width: 870px) {
+    .feedback-article {
+        width: 60vw;
+        font-size: 2vw;
+    }
+
+    #feedback-form {
+        width: 60vw;
+    }
+
+    .feedback-button {
+        width: 30vw;
+        font-size: 1.5vw;
+    }
+
+    #feedback-text {
+        min-height: 15vw;
+    }
+
+    .feedback-header {
+        font-size: 6.5vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .feedback-container {
+        grid-template-rows: 1fr 1fr 2fr;
+    }
+
+    .feedback-header {
+        font-size: 9vw;
+    }
+
+    .feedback-article {
+        width: 90vw;
+        font-size: 3.5vw;
+    }
+
+    #feedback-form {
+        width: 90vw;
+    }
+
+    #feedback-text {
+        min-height: 20vw;
+        margin-top: 2em;
+    }
+
+    .feedback-button {
+        width: 40vw;
+        font-size: 2.5vw;
+        height: 7vw;
+    }
 }
