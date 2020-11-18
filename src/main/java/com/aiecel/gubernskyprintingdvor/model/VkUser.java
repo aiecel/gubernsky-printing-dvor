@@ -27,6 +27,6 @@ public class VkUser extends User {
 
     @Override
     public String toString() {
-        return "VK User: " + firstName + " " + lastName + ", vk id = " + vkId;
+        return firstName + " " + lastName + ", vk id = " + vkId;
     }
 }
