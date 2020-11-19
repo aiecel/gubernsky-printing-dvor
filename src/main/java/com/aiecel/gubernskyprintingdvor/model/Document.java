@@ -6,24 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Size;
-import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "feedbacks")
+@Table(name = "documents")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Feedback {
+public class Document {
     @Id
     @GeneratedValue
     private long id;
 
-    @Size(min = 1, max = 5000)
-    private String text;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @PastOrPresent
-    private ZonedDateTime sendingDateTime;
+    private String title;
+
+    private byte[] data;
+
+    private int pages;
 }

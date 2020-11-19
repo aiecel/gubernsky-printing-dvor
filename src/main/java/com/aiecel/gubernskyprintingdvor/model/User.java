@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +17,9 @@ import javax.persistence.*;
 @Setter
 public abstract class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
 }
