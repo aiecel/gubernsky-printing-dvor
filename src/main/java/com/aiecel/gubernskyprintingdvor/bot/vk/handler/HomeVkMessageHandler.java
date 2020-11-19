@@ -18,10 +18,19 @@ public class HomeVkMessageHandler extends VkMessageHandler {
 
     public static final String MESSAGE_GREETINGS = "На добр приветъ добр и ответъ!";
 
+    public static final String ACTION_ORDER = "Сделать заказъ";
     public static final String ACTION_FEEDBACK = "Книга жалобъ";
 
     @Override
     public Message onMessage(Message message, Chatter<Message> chatter) {
+        //proceed to order handler
+        if (message.getText().equals(ACTION_ORDER)) {
+            OrderVkMessageHandler messageHandler = getOrderVkMessageHandler();
+            messageHandler.setVkUserId(message.getFromId());
+            chatter.setMessageHandler(message.getFromId(), messageHandler);
+            return messageHandler.onMessage(message, chatter);
+        }
+
         //proceed to feedback handler
         if (message.getText().equals(ACTION_FEEDBACK)) {
             chatter.setMessageHandler(message.getFromId(), getFeedbackVkMessageHandler());
@@ -37,6 +46,11 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     }
 
     @Lookup
+    public OrderVkMessageHandler getOrderVkMessageHandler() {
+        return null;
+    }
+
+    @Lookup
     public FeedbackVkMessageHandler getFeedbackVkMessageHandler() {
         return null;
     }
@@ -45,10 +59,20 @@ public class HomeVkMessageHandler extends VkMessageHandler {
         Keyboard keyboard = new Keyboard();
 
         List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(new KeyboardButton().setAction(new KeyboardButtonAction().setLabel(ACTION_FEEDBACK).setType(KeyboardButtonActionType.TEXT)));
+        row1.add(
+                new KeyboardButton().setAction(
+                        new KeyboardButtonAction()
+                                .setLabel(ACTION_ORDER)
+                                .setType(KeyboardButtonActionType.TEXT)
+                ).setColor(KeyboardButtonColor.PRIMARY)
+        );
+
+        List<KeyboardButton> row2 = new ArrayList<>();
+        row2.add(new KeyboardButton().setAction(new KeyboardButtonAction().setLabel(ACTION_FEEDBACK).setType(KeyboardButtonActionType.TEXT)));
 
         List<List<KeyboardButton>> buttons = new ArrayList<>();
         buttons.add(row1);
+        buttons.add(row2);
 
         keyboard.setButtons(buttons);
         keyboard.setOneTime(true);

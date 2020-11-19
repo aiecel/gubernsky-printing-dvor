@@ -29,6 +29,12 @@ public class VkUserServiceImpl implements VkUserService {
     }
 
     @Override
+    public VkUser getUser(int vkId) {
+        //todo change name
+        return vkUserRepository.findByVkId(vkId).orElseGet(() -> register(vkId));
+    }
+
+    @Override
     public boolean isUserExists(int vkId) {
         return vkUserRepository.existsByVkId(vkId);
     }

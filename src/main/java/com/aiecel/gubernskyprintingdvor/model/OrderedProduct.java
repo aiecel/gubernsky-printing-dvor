@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class OrderedProduct {
+public class OrderedProduct {
     @Id
     @GeneratedValue
     private long id;

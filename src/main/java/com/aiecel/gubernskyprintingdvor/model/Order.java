@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,11 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private User customer;
 
-    @OneToMany(mappedBy = "order")
-    private List<Document> documents;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Document> documents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderedProduct> orderedProducts;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderedProduct> orderedProducts = new ArrayList<>();
 
     private String comment;
 
@@ -38,4 +39,14 @@ public class Order {
     private BigDecimal price;
 
     private boolean isPaid;
+
+    public void addProduct(OrderedProduct orderedProduct) {
+        for (OrderedProduct product : orderedProducts) {
+            if (product.getProduct().getName().equals(orderedProduct.getProduct().getName())) {
+                product.setQuantity(product.getQuantity() + orderedProduct.getQuantity());
+                return;
+            }
+        }
+        orderedProducts.add(orderedProduct);
+    }
 }

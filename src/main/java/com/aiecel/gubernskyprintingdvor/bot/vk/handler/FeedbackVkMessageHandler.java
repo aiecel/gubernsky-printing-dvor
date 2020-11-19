@@ -3,6 +3,7 @@ package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
 import com.aiecel.gubernskyprintingdvor.service.FeedbackService;
 import com.vk.api.sdk.objects.messages.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
     private final FeedbackService feedbackService;
     private final StringBuilder feedbackTextBuilder;
 
+    @Autowired
     public FeedbackVkMessageHandler(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
         this.feedbackTextBuilder = new StringBuilder();
