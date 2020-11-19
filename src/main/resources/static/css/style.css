@@ -68,3 +68,25 @@ section {
 .btn {
     margin-top: 1em;
 }
+
+@media (max-width: 470px) {
+    .feedback-header {
+        padding-top: 12px;
+        font-size: 30px;
+    }
+
+    .feedback-article {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 350px) {
+    .feedback-header {
+        padding-top: 7px;
+        font-size: 26px;
+    }
+
+    .feedback-article {
+        font-size: 15px;
+    }
+}
