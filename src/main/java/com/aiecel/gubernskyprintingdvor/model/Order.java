@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Order implements Pricing {
+public class Order {
     @Id
     @GeneratedValue
     private long id;

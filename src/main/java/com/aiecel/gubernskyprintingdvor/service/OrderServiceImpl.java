@@ -10,19 +10,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final ProductService productService;
+    private final PricingService pricingService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
-                            ProductService productService) {
+                            PricingService pricingService) {
         this.orderRepository = orderRepository;
-        this.productService = productService;
+        this.pricingService = pricingService;
     }
 
     @Override
     public Order save(Order order) {
-        Order savedOrder = orderRepository.save(order);
+        order.setPrice(pricingService.calculatePrice(order));
         log.info("New order! - {}", order);
-        return savedOrder;
+        return orderRepository.save(order);
     }
 }

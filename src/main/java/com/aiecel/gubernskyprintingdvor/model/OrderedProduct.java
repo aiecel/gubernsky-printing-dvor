@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrderedProduct implements Pricing {
+public abstract class OrderedProduct {
     @Id
     @GeneratedValue
     private long id;
@@ -29,7 +29,6 @@ public class OrderedProduct implements Pricing {
 
     private int quantity;
 
-    @Override
     public BigDecimal getPrice() {
         return product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
