@@ -17,6 +17,8 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class Feedback {
+    public static final int MAX_TO_STRING_LENGTH = 50;
+
     @Id
     @GeneratedValue
     private long id;
@@ -26,4 +28,9 @@ public class Feedback {
 
     @PastOrPresent
     private ZonedDateTime sendingDateTime;
+
+    @Override
+    public String toString() {
+        return text.length() > MAX_TO_STRING_LENGTH ? text.substring(0, MAX_TO_STRING_LENGTH) : text;
+    }
 }

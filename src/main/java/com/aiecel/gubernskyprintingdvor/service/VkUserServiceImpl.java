@@ -34,7 +34,7 @@ public class VkUserServiceImpl implements VkUserService {
     }
 
     @Override
-    public void register(int vkId) {
+    public VkUser register(int vkId) {
         try {
             List<UserXtrCounters> users =  vkApiClient
                     .users()
@@ -46,15 +46,18 @@ public class VkUserServiceImpl implements VkUserService {
             String firstName = users.get(0).getFirstName();
             String lastName = users.get(0).getLastName();
 
-            register(new VkUser(vkId, firstName, lastName));
+            return register(new VkUser(vkId, firstName, lastName));
         } catch (ApiException | ClientException e) {
+            log.error("Can't register VK user with id {}: {}", vkId, e.getMessage());
             e.printStackTrace();
+            return null;
         }
     }
 
     @Override
-    public void register(VkUser user) {
-        vkUserRepository.save(user);
+    public VkUser register(VkUser user) {
+        VkUser vkUser = vkUserRepository.save(user);
         log.info("Registered new VK user: {}", user);
+        return vkUser;
     }
 }

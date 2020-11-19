@@ -19,14 +19,17 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public void save(String feedbackText) {
+    public Feedback save(String feedbackText) {
         Feedback feedback = new Feedback();
         feedback.setText(feedbackText);
         feedback.setSendingDateTime(ZonedDateTime.now());
+        return save(feedback);
+    }
 
-        feedbackRepository.save(feedback);
-        log.info("New feedback - {}",
-                feedback.getText().length() <= 50 ? feedback.getText() : feedback.getText().substring(0, 50) + "..."
-        );
+    @Override
+    public Feedback save(Feedback feedback) {
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+        log.info("New feedback! - {}", feedback);
+        return savedFeedback;
     }
 }

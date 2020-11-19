@@ -18,6 +18,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Product implements Pricing {
+    public static final String PAGE_PRODUCT_NAME = "Печатный листъ";
+    public static final BigDecimal PAGE_PRODUCT_DEFAULT_PRICE = new BigDecimal(3);
+
     @Id
     @GeneratedValue
     private long id;
