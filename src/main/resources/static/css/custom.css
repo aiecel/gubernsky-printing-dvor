@@ -6,6 +6,11 @@ button:focus {
     display: none;
 }
 
+.navbar {
+    border-bottom: 1px solid #1d1d1f;
+    width: 100%
+}
+
 .navbar-brand {
     font-size: 1.8rem;
     font-weight: bold;
@@ -56,4 +61,8 @@ button:focus {
     .navbar-brand {
         font-size: 0.9em;
     }
+}
+
+.form-group {
+    width: auto;
 }

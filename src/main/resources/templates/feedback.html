@@ -22,7 +22,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#">Губернский Печатный Двор</a>
+    <a class="navbar-brand" href="index.html">Губернский Печатный Двор</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Жалобная книга<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="feedback.html">Жалобная книга<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Вести двора</a>
@@ -43,36 +43,39 @@
             </li>
         </ul>
     </div>
-        <div class="collapse navbar-collapse justify-content-end">
-            <ul class="nav navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Кабинет</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Выход</a>
-                </li>
-            </ul>
-        </div>
-
-</nav>
-<!--/.Navbar-->
-<div class="navigation-bar-divider"></div>
-<section id="feedback-container">
-    <div class="feedback-article">
-        Есть предложения по улучшению Печатного Двора?<br>
-        Не понравилось обслуживание?<br>
-        Просто хотите написать гадостей?<br>
-        Это всё можно сделать здесь.<br>
+    <div class="collapse navbar-collapse justify-content-end">
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Кабинет</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Выход</a>
+            </li>
+        </ul>
     </div>
-    <form id="feedback-form" method="post">
-        <textarea maxlength="300" autofocus form="feedback-form" id="feedback-text" placeholder="Пишите..."
-                  name="text"></textarea>
-        <div id="feedback-button">
-            <button type="submit">Отправить</button>
+</nav>
+<section>
+    <div class="feedback-container">
+        <div class="feedback-header"><p>Жалобная Книга</p></div>
+
+        <!--            <form id="feedback-form" method="post">-->
+        <!--                <textarea maxlength="500" autofocus form="feedback-form" id="feedback-text" placeholder="Пишите..."-->
+        <!--                             name="text"></textarea>-->
+        <!--                <button class="feedback-button" type="submit">Отправить</button>-->
+        <!--            </form>-->
+        <article class="feedback-article"><p>Есть предложения, замечания или пожелания к Печатному Двору? <br>
+            Дак не ленись и распиши всё поподробнее!</p>
+        </article>
+        <div class="form-group shadow-textarea">
+            <form method="post">
+                <textarea minlength="1" maxlength="5000" class="form-control" name="text" id="exampleFormControlTextarea6"
+                          cols="50" rows="5"
+                          placeholder="Пишите..."></textarea>
+                <button type="submit" class="btn btn-light">Отослать!</button>
+            </form>
+
         </div>
-    </form>
+    </div>
 </section>
-
-
 </body>
 </html>
