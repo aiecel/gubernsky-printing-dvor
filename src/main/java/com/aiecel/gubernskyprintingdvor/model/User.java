@@ -17,8 +17,8 @@ import java.util.List;
 @Setter
 public abstract class User {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;

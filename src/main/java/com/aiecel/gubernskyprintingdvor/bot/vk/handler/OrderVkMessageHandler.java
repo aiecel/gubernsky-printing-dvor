@@ -50,7 +50,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         if (orderedProduct != null) {
             try {
                 orderedProduct.setQuantity(Integer.parseInt(message.getText()));
-                order.addProduct(orderedProduct);
+                order.addOrderedProduct(orderedProduct);
                 orderedProduct.setOrder(order);
                 orderedProduct = null;
             } catch (NumberFormatException e) {

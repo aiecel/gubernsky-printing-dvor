@@ -16,15 +16,15 @@ import java.util.List;
 @Setter
 public class Order {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private User customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<Document> documents = new ArrayList<>();
+    private List<OrderedDocument> orderedDocuments = new ArrayList<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderedProduct> orderedProducts = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Order {
 
     private boolean isPaid;
 
-    public void addProduct(OrderedProduct orderedProduct) {
+    public void addOrderedProduct(OrderedProduct orderedProduct) {
         for (OrderedProduct product : orderedProducts) {
             if (product.getProduct().getName().equals(orderedProduct.getProduct().getName())) {
                 product.setQuantity(product.getQuantity() + orderedProduct.getQuantity());

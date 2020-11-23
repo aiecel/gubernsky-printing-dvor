@@ -8,12 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ordered_products")
+@Table(name = "ordered_documents")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrderedProduct implements OrderedItem {
+public class OrderedDocument implements OrderedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +22,9 @@ public class OrderedProduct implements OrderedItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToOne
+    @JoinColumn(name = "document_id")
+    private Document document;
 
     private int quantity = 1;
 }

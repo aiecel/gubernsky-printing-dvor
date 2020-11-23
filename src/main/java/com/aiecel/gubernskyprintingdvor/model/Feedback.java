@@ -20,8 +20,8 @@ public class Feedback {
     public static final int MAX_TO_STRING_LENGTH = 50;
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Size(min = 1, max = 5000)
     private String text;

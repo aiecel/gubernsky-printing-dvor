@@ -1,7 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.service;
 
-import com.aiecel.gubernskyprintingdvor.model.Document;
 import com.aiecel.gubernskyprintingdvor.model.Order;
+import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,14 @@ public class PricingServiceImpl implements PricingService {
         BigDecimal price = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         //calculate price for all pages
-        for (Document document : order.getDocuments()) {
-            price = price.add(productService.getPageProduct().getPrice().multiply(new BigDecimal(document.getPages())));
+        for (OrderedDocument orderedDocument : order.getOrderedDocuments()) {
+            BigDecimal documentPrice = productService.getPageProduct().getPrice().multiply(new BigDecimal(orderedDocument.getDocument().getPages()));
+            price = price.add(documentPrice.multiply(new BigDecimal(orderedDocument.getQuantity())));
         }
 
         //calculate price for all ordered products
-        for (OrderedProduct product : order.getOrderedProducts()) {
-            price = price.add(product.getPrice());
+        for (OrderedProduct orderedProduct : order.getOrderedProducts()) {
+            price = price.add(orderedProduct.getProduct().getPrice().multiply(new BigDecimal(orderedProduct.getQuantity())));
         }
 
         return price;

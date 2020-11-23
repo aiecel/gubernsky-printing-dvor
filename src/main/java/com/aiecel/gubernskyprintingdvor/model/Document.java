@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Setter
 public class Document {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "owner_id")
+    private VkUser owner;
 
     private String title;
 

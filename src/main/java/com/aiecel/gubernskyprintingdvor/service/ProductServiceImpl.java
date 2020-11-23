@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageProduct savePageProduct(PageProduct pageProduct) {
-        pageProduct.setId(0);
+        pageProduct.setId(0L);
         return pageProductRepository.save(pageProduct);
     }
 }
