@@ -16,10 +16,10 @@ public class HomeVkMessageHandler extends VkMessageHandler {
             "Губернский Печатный Дворъ привѣтствуетъ тебя, засельщина земли Губернской! \n" +
                     "Возжелаешь ли отпечатать бумаги свои? Нашъ станъ готовъ неустанно трудиться денно и нощно";
 
-    public static final String MESSAGE_GREETINGS = "На добр приветъ добр и ответъ!";
+    public static final String MESSAGE_GREETINGS = "\uD83C\uDF1A На добр приветъ добр и ответъ!";
 
-    public static final String ACTION_ORDER = "Сделать заказъ";
-    public static final String ACTION_FEEDBACK = "Книга жалобъ";
+    public static final String ACTION_ORDER = "\uD83D\uDCE6 Сделать заказъ";
+    public static final String ACTION_FEEDBACK = "\uD83D\uDCD6 Книга жалобъ";
 
     @Override
     public Message getDefaultMessage() {

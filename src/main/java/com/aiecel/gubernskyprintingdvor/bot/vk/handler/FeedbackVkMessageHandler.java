@@ -20,12 +20,12 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
                     "али шаленьство настигло?\n" +
                     "Дакъ не робѣй, да пиши же намъ поскорѣй!";
 
-    public static final String MESSAGE_CONFIRM_SENDING = "Предпослати всё это мездникамъ двора?\n Коли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
+    public static final String MESSAGE_CONFIRM_SENDING = "Предпослати всё это мездникамъ двора?\nКоли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
     public static final String MESSAGE_CANCEL_SENDING = "Ну, такъ тому и бывати!/nЕжели надобность имѣется что болѣ сдѣлати во Дворѣ, благопослушливо готовы помогати въ дѣлахъ вашихъ";
     public static final String MESSAGE_FEEDBACK_SENT = "Жалоба отослана!\nЕжели надобность имѣется что болѣ сдѣлати во Дворѣ, благопослушливо готовы помогати въ дѣлахъ вашихъ";
 
-    public static final String ACTION_BACK_TO_HOME_HANDLER = "Пока не отсылати";
-    public static final String ACTION_CONFIRM_SENDING = "Послати!";
+    public static final String ACTION_BACK_TO_HOME_HANDLER = "\uD83D\uDEAB Пока не отсылати";
+    public static final String ACTION_CONFIRM_SENDING = "\uD83D\uDC49\uD83C\uDFFB Послати!";
 
     private final FeedbackService feedbackService;
     private final StringBuilder feedbackTextBuilder;
@@ -74,7 +74,7 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
                         new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_HOME_HANDLER)
                                 .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.PRIMARY)
+                ).setColor(KeyboardButtonColor.NEGATIVE)
         );
 
         List<List<KeyboardButton>> buttons = new ArrayList<>();

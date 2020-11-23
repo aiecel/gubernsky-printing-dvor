@@ -17,10 +17,10 @@ import java.util.List;
 public class CommentOrderVkMessageHandler extends VkMessageHandler {
     public static final String DEFAULT_MESSAGE = "Напишите комментарий к заказу ежели хотити что-то передать мездникам двора";
 
-    public static final String MESSAGE_CONFIRM = "Прикрепить эти слова к заказу?\n Коли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
+    public static final String MESSAGE_CONFIRM = "Прикрепить эти слова к заказу?\nКоли настигло хотѣніе къ данному преболе добавить - дакъ пишите же!";
 
-    public static final String ACTION_CANCEL = "Отменить";
-    public static final String ACTION_CONFIRM = "Прикрепить";
+    public static final String ACTION_CANCEL = "\uD83D\uDEAB Отменить";
+    public static final String ACTION_CONFIRM = "✏ Прикрепить";
 
     private final StringBuilder commentTextBuilder;
 

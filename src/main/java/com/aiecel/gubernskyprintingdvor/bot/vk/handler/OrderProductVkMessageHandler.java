@@ -19,12 +19,12 @@ import java.util.List;
 public class OrderProductVkMessageHandler extends VkMessageHandler {
     public static final String MESSAGE_ASK_QUANTITY = "Сколько пожелаете?";
     public static final String MESSAGE_ASK_QUANTITY_AGAIN = "Сколько ещё разъ?";
-    public static final String MESSAGE_ZERO_QUANTITY = "Ну, ноль так ноль. Что-то ещё?";
-    public static final String MESSAGE_TOO_MUCH_QUANTITY = "Ух! Столь много не можемъ вамъ выдать! Давайте поменьше";
-    public static final String MESSAGE_PRODUCT_PRICE = "Сегодня у насъ %s стоитъ %s рублей!";
+    public static final String MESSAGE_ZERO_QUANTITY = "Ну, ноль так ноль. Что-то ещё?"; //not used for now
+    public static final String MESSAGE_TOO_MUCH_QUANTITY = "\uD83D\uDE33 Ух! Столь много не можемъ вамъ выдать! Давайте поменьше";
+    public static final String MESSAGE_PRODUCT_PRICE = "\uD83D\uDE0F Сегодня у насъ %s стоитъ %s рублей!";
 
-    public static final String ACTION_CANCEL = "Ладно, не буду";
-    public static final String ACTION_CHECK_PRICE = "А по чёмъ штука?";
+    public static final String ACTION_CANCEL = "\uD83D\uDEAB Ладно, не буду";
+    public static final String ACTION_CHECK_PRICE = "\uD83D\uDC40 А по чёмъ штука?";
 
     private Order order;
     private Product product;

@@ -18,18 +18,18 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class OrderVkMessageHandler extends VkMessageHandler {
-    public static final String DEFAULT_MESSAGE = "Хотите что-то отпечатать? Просто взять товару? Как вамъ угодно!";
+    public static final String DEFAULT_MESSAGE = "\uD83D\uDCF0 Хотите что-то отпечатать? Просто взять товару? Как вамъ угодно!";
 
-    public static final String MESSAGE_ORDER = "Ваша корзина:\n";
-    public static final String MESSAGE_ORDERED_PRODUCT = "%s - %d шт.";
-    public static final String MESSAGE_TOTAL = "-----------\nИТОГО: %s руб.";
-    public static final String MESSAGE_COMMENT = "Комментарий к заказу: %s";
-    public static final String MESSAGE_ON_CANCEL = "Эх, ну ладно. Ежели что-то хотите сделать - только напишите!";
+    public static final String MESSAGE_ORDER = "\uD83D\uDED2 Ваша корзина:\n";
+    public static final String MESSAGE_ORDERED_PRODUCT = "• %s - %d шт.";
+    public static final String MESSAGE_TOTAL = "\uD83D\uDCB0 ИТОГО: %s руб.";
+    public static final String MESSAGE_COMMENT = "✏ Комментарий к заказу: %s";
+    public static final String MESSAGE_ON_CANCEL = "\uD83E\uDD25 Эх, ну ладно. Ежели что-то хотите сделать - только напишите!";
     public static final String MESSAGE_WHAT_ELSE = "Что-то ещё хотите? Не стесняйтесь, берите!";
 
-    public static final String ACTION_TO_PAYMENT = "Оплатить!";
-    public static final String ACTION_COMMENT = "Прикрепить комментарий";
-    public static final String ACTION_CANCEL = "Отменить заказъ";
+    public static final String ACTION_TO_PAYMENT = "\uD83D\uDCB4 Оплатить!";
+    public static final String ACTION_COMMENT = "✏ Прикрепить комментарий";
+    public static final String ACTION_CANCEL = "\uD83D\uDEAB Отменить заказъ";
 
     private final VkUserService vkUserService;
     private final ProductService productService;

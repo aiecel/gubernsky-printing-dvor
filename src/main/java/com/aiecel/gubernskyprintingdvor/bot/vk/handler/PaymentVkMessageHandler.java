@@ -22,28 +22,28 @@ import java.util.List;
 @Setter
 public class PaymentVkMessageHandler extends VkMessageHandler {
     public static final String MESSAGE_TITLE =
-            "\"О плате глаголятъ либо добро, либо никак.\n" +
-            "Мы не стыдимся и говорим так, как есть\"";
+            "\uD83D\uDC46\uD83C\uDFFB О плате глаголятъ либо добро, либо никак.\n" +
+            "Мы не стыдимся и говорим так, как есть";
 
-    public static final String MESSAGE_TOTAL = "Итого к оплате: %s руб.";
+    public static final String MESSAGE_TOTAL = "\uD83D\uDCB0 Итого к оплате: %s руб.";
     public static final String MESSAGE_NO_DEBT =
-            "У васъ нет долгов! \n" +
+            "\uD83D\uDE0E У васъ нет долгов! \n" +
             "С радованием предоставимъ вам бумагу в долг!";
 
     public static final String MESSAGE_SMALL_DEBT =
-            "Вашъ долг составляетъ %s руб. \n" +
+            "\uD83D\uDE11 Вашъ долг составляетъ %s руб. \n" +
                     "Мы считаемъ, что это небольшая сумма и позволяем вамъ оплатить этотъ заказ в долг!";
 
     public static final String MESSAGE_BIG_DEBT =
-            "Вашъ долг составляетъ аш %s руб. \n" +
+            "\uD83D\uDE28 Вашъ долг составляетъ аш %s руб. \n" +
                     "\"Как не вертись, с должником расплатись!\" - велит русская поговорка. Оплатить этот заказъ вы можете только через VK Pay";
 
-    public static final String MESSAGE_ON_ORDER = "Вот так то лучше! Заказ отправлен, ежели ещё остались какие-то дела - милости просим!";
-    public static final String MESSAGE_ON_CANCEL = "Эх, ну ладно. Ежели что-то хотите сделать - только напишите!";
+    public static final String MESSAGE_ON_ORDER = "\uD83D\uDE0F Вот так то лучше! Заказ отправлен, ежели ещё остались какие-то дела - милости просим!";
+    public static final String MESSAGE_ON_CANCEL = "\uD83E\uDD25 Эх, ну ладно. Ежели что-то хотите сделать - только напишите!";
 
-    public static final String ACTION_DEBT = "Запишите в долгъ";
-    public static final String ACTION_BACK_TO_ORDER = "Хочу кое-что ещё!";
-    public static final String ACTION_CANCEL = "Я передумал заказывать";
+    public static final String ACTION_DEBT = "✍\uD83C\uDFFB Запишите в долгъ";
+    public static final String ACTION_BACK_TO_ORDER = "\uD83D\uDE44 Хочу кое-что ещё!";
+    public static final String ACTION_CANCEL = "\uD83D\uDEAB Я передумал заказывать";
 
     private final UserService userService;
     private final OrderService orderService;
