@@ -9,7 +9,6 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.Fields;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +20,6 @@ public class VkUserServiceImpl implements VkUserService {
     private final GroupActor groupActor;
     private final VkUserRepository vkUserRepository;
 
-    @Autowired
     public VkUserServiceImpl(VkApiClient vkApiClient, GroupActor groupActor, VkUserRepository vkUserRepository) {
         this.vkApiClient = vkApiClient;
         this.groupActor = groupActor;

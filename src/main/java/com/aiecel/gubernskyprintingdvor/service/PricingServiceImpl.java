@@ -3,7 +3,6 @@ package com.aiecel.gubernskyprintingdvor.service;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,7 +11,6 @@ import java.math.BigDecimal;
 public class PricingServiceImpl implements PricingService {
     private final ProductService productService;
 
-    @Autowired
     public PricingServiceImpl(ProductService productService) {
         this.productService = productService;
     }
