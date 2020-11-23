@@ -1,9 +1,10 @@
 package com.aiecel.gubernskyprintingdvor.service;
 
+import com.aiecel.gubernskyprintingdvor.model.PageProduct;
 import com.aiecel.gubernskyprintingdvor.model.Product;
+import com.aiecel.gubernskyprintingdvor.repository.PageProductRepository;
 import com.aiecel.gubernskyprintingdvor.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,20 +14,11 @@ import java.util.Optional;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final PageProductRepository pageProductRepository;
 
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, PageProductRepository pageProductRepository) {
         this.productRepository = productRepository;
-    }
-
-    @Override
-    public Product getPageProduct() {
-        return productRepository.findByName(Product.PAGE_PRODUCT_NAME).orElseGet(() -> {
-            Product pageProduct = new Product();
-            pageProduct.setName(Product.PAGE_PRODUCT_NAME);
-            pageProduct.setPrice(Product.PAGE_PRODUCT_DEFAULT_PRICE);
-            return save(pageProduct);
-        });
+        this.pageProductRepository = pageProductRepository;
     }
 
     @Override
@@ -44,5 +36,16 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         log.info("New product saved - {}", product);
         return savedProduct;
+    }
+
+    @Override
+    public PageProduct getPageProduct() {
+        return pageProductRepository.findById(0L).orElseGet(() -> pageProductRepository.save(new PageProduct()));
+    }
+
+    @Override
+    public PageProduct savePageProduct(PageProduct pageProduct) {
+        pageProduct.setId(0);
+        return pageProductRepository.save(pageProduct);
     }
 }

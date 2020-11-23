@@ -12,17 +12,17 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
+@Table(name = "page_product")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Product {
+public final class PageProduct {
+    public static final BigDecimal PAGE_PRODUCT_DEFAULT_PRICE = new BigDecimal(3);
+
     @Id
     @GeneratedValue
     private long id;
 
-    private String name;
-
-    private BigDecimal price;
+    private BigDecimal price = PAGE_PRODUCT_DEFAULT_PRICE;
 }

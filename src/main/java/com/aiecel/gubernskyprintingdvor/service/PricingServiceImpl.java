@@ -19,7 +19,7 @@ public class PricingServiceImpl implements PricingService {
 
     @Override
     public BigDecimal calculatePrice(Order order) {
-        BigDecimal price = BigDecimal.ZERO;
+        BigDecimal price = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         //calculate price for all pages
         for (Document document : order.getDocuments()) {
