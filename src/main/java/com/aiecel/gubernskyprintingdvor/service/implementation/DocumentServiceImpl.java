@@ -1,7 +1,8 @@
-package com.aiecel.gubernskyprintingdvor.service;
+package com.aiecel.gubernskyprintingdvor.service.implementation;
 
 import com.aiecel.gubernskyprintingdvor.model.Document;
 import com.aiecel.gubernskyprintingdvor.repository.DocumentRepository;
+import com.aiecel.gubernskyprintingdvor.service.DocumentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,10 @@
-package com.aiecel.gubernskyprintingdvor.service;
+package com.aiecel.gubernskyprintingdvor.service.implementation;
 
 import com.aiecel.gubernskyprintingdvor.model.PageProduct;
 import com.aiecel.gubernskyprintingdvor.model.Product;
 import com.aiecel.gubernskyprintingdvor.repository.PageProductRepository;
 import com.aiecel.gubernskyprintingdvor.repository.ProductRepository;
+import com.aiecel.gubernskyprintingdvor.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

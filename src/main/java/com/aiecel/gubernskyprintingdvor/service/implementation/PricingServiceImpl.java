@@ -1,8 +1,10 @@
-package com.aiecel.gubernskyprintingdvor.service;
+package com.aiecel.gubernskyprintingdvor.service.implementation;
 
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
+import com.aiecel.gubernskyprintingdvor.service.PricingService;
+import com.aiecel.gubernskyprintingdvor.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -1,7 +1,8 @@
-package com.aiecel.gubernskyprintingdvor.service;
+package com.aiecel.gubernskyprintingdvor.service.implementation;
 
 import com.aiecel.gubernskyprintingdvor.model.VkUser;
 import com.aiecel.gubernskyprintingdvor.repository.VkUserRepository;
+import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
