@@ -22,19 +22,22 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     public static final String ACTION_FEEDBACK = "Книга жалобъ";
 
     @Override
+    public Message getDefaultMessage() {
+        return constructVkMessage(DEFAULT_MESSAGE, keyboard());
+    }
+
+    @Override
     public Message onMessage(Message message, Chatter<Message> chatter) {
         //proceed to order handler
         if (message.getText().equals(ACTION_ORDER)) {
             OrderVkMessageHandler messageHandler = getOrderVkMessageHandler();
             messageHandler.setVkUserId(message.getFromId());
-            chatter.setMessageHandler(message.getFromId(), messageHandler);
-            return messageHandler.onMessage(message, chatter);
+            return proceedToNewMessageHandler(message.getFromId(), messageHandler, chatter);
         }
 
         //proceed to feedback handler
         if (message.getText().equals(ACTION_FEEDBACK)) {
-            chatter.setMessageHandler(message.getFromId(), getFeedbackVkMessageHandler());
-            return constructVkMessage(FeedbackVkMessageHandler.DEFAULT_MESSAGE, FeedbackVkMessageHandler.toHomeHandlerKeyboard());
+            return proceedToNewMessageHandler(message.getFromId(), getFeedbackVkMessageHandler(), chatter);
         }
 
         //greetings
@@ -43,16 +46,6 @@ public class HomeVkMessageHandler extends VkMessageHandler {
         }
 
         return constructVkMessage(DEFAULT_MESSAGE, keyboard());
-    }
-
-    @Lookup
-    public OrderVkMessageHandler getOrderVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public FeedbackVkMessageHandler getFeedbackVkMessageHandler() {
-        return null;
     }
 
     public static Keyboard keyboard() {
@@ -68,7 +61,14 @@ public class HomeVkMessageHandler extends VkMessageHandler {
         );
 
         List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(new KeyboardButton().setAction(new KeyboardButtonAction().setLabel(ACTION_FEEDBACK).setType(KeyboardButtonActionType.TEXT)));
+        row2.add(
+                new KeyboardButton()
+                        .setAction(
+                                new KeyboardButtonAction()
+                                        .setLabel(ACTION_FEEDBACK)
+                                        .setType(KeyboardButtonActionType.TEXT)
+                        )
+        );
 
         List<List<KeyboardButton>> buttons = new ArrayList<>();
         buttons.add(row1);
@@ -87,5 +87,15 @@ public class HomeVkMessageHandler extends VkMessageHandler {
                 messageLowerCase.contains("здоров") ||
                 messageLowerCase.contains("здравс") ||
                 messageLowerCase.equals("ку");
+    }
+
+    @Lookup
+    public OrderVkMessageHandler getOrderVkMessageHandler() {
+        return null;
+    }
+
+    @Lookup
+    public FeedbackVkMessageHandler getFeedbackVkMessageHandler() {
+        return null;
     }
 }

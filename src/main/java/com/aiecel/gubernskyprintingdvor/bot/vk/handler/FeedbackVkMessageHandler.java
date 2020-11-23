@@ -37,6 +37,11 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
     }
 
     @Override
+    public Message getDefaultMessage() {
+        return constructVkMessage(DEFAULT_MESSAGE, toHomeHandlerKeyboard());
+    }
+
+    @Override
     public Message onMessage(Message message, Chatter<Message> chatter) {
         //back to home handler
         if (message.getText().equals(ACTION_BACK_TO_HOME_HANDLER)) {
@@ -58,11 +63,6 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
                     confirmSendingKeyboard()
             );
         }
-    }
-
-    @Lookup
-    public HomeVkMessageHandler getHomeVkMessageHandler() {
-        return null;
     }
 
     public static Keyboard toHomeHandlerKeyboard() {
@@ -96,9 +96,7 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
                                 .setType(KeyboardButtonActionType.TEXT)
                 ).setColor(KeyboardButtonColor.POSITIVE)
         );
-
-        List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(
+        row1.add(
                 new KeyboardButton().setAction(
                         new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_HOME_HANDLER)
@@ -108,10 +106,14 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
 
         List<List<KeyboardButton>> buttons = new ArrayList<>();
         buttons.add(row1);
-        buttons.add(row2);
 
         keyboard.setButtons(buttons);
         keyboard.setOneTime(true);
         return keyboard;
+    }
+
+    @Lookup
+    public HomeVkMessageHandler getHomeVkMessageHandler() {
+        return null;
     }
 }

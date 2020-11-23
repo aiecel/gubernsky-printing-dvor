@@ -4,16 +4,14 @@ import com.aiecel.gubernskyprintingdvor.bot.Chatter;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
 import com.aiecel.gubernskyprintingdvor.model.Product;
-import com.aiecel.gubernskyprintingdvor.service.OrderService;
+import com.aiecel.gubernskyprintingdvor.service.PricingService;
 import com.aiecel.gubernskyprintingdvor.service.ProductService;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.objects.messages.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,20 +20,28 @@ import java.util.List;
 public class OrderVkMessageHandler extends VkMessageHandler {
     public static final String DEFAULT_MESSAGE = "Хотите что-то отпечатать? Просто взять товару? Как вамъ угодно!";
 
-    public static final String MESSAGE_QUANTITY = "Сколько хотите?";
+    public static final String MESSAGE_ORDER = "Ваша корзина:\n";
+    public static final String MESSAGE_ORDERED_PRODUCT = "%s - %d шт.";
+    public static final String MESSAGE_TOTAL = "-----------\nИТОГО: %s руб.";
+    public static final String MESSAGE_COMMENT = "Комментарий к заказу: %s";
+    public static final String MESSAGE_ON_CANCEL = "Эх, ну ладно. Ежели что-то хотите сделать - только напишите!";
+    public static final String MESSAGE_WHAT_ELSE = "Что-то ещё хотите? Не стесняйтесь, берите!";
+
+    public static final String ACTION_TO_PAYMENT = "Оплатить!";
+    public static final String ACTION_COMMENT = "Прикрепить комментарий";
+    public static final String ACTION_CANCEL = "Отменить заказъ";
 
     private final VkUserService vkUserService;
     private final ProductService productService;
-    private final OrderService orderService;
-    private final Order order;
+    private final PricingService pricingService;
+    private Order order;
 
-    private OrderedProduct orderedProduct;
-
-    @Autowired
-    public OrderVkMessageHandler(VkUserService vkUserService, ProductService productService, OrderService orderService) {
+    public OrderVkMessageHandler(VkUserService vkUserService,
+                                 ProductService productService,
+                                 PricingService pricingService) {
         this.vkUserService = vkUserService;
         this.productService = productService;
-        this.orderService = orderService;
+        this.pricingService = pricingService;
         this.order = new Order();
     }
 
@@ -43,54 +49,70 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         order.setCustomer(vkUserService.getUser(vkId));
     }
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     @Override
-    public Message onMessage(Message message, Chatter<Message> chatter) {
-        List<Product> products = productService.getAll();
-
-        if (orderedProduct != null) {
-            try {
-                orderedProduct.setQuantity(Integer.parseInt(message.getText()));
-                order.addOrderedProduct(orderedProduct);
-                orderedProduct.setOrder(order);
-                orderedProduct = null;
-            } catch (NumberFormatException e) {
-                return constructVkMessage("Ещё раз сколько?");
-            }
+    public Message getDefaultMessage() {
+        if (order.isEmpty()) {
+            return constructVkMessage(DEFAULT_MESSAGE, mainKeyboard(productService.getAll(), false));
         } else {
-            if (products.stream().anyMatch(product -> message.getText().equals(product.getName()))) {
-                orderedProduct = new OrderedProduct();
-                orderedProduct.setProduct(productService.getProduct(message.getText()).orElse(null));
-                return constructVkMessage(MESSAGE_QUANTITY);
-            }
-        }
-        if (order.getOrderedProducts().size() > 0) {
-            if (message.getText().equals("Сделать заказ")) {
-                order.setOrderDateTime(ZonedDateTime.now());
-                orderService.save(order);
-                chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-                return constructVkMessage("Спасибо за заказ!");
-            }
-
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.append("Вашъ заказ:\n");
+            stringBuilder.append(MESSAGE_ORDER).append("\n");
             for (OrderedProduct product : order.getOrderedProducts()) {
                 stringBuilder
-                        .append(product.getProduct().getName())
-                        .append(" - ")
-                        .append(product.getQuantity())
-                        .append("шт.\n");
+                        .append(String.format(MESSAGE_ORDERED_PRODUCT, product.getProduct().getName(), product.getQuantity()))
+                        .append("\n");
             }
-            stringBuilder.append("Что-то ещё?");
+            stringBuilder.append(String.format(MESSAGE_TOTAL, pricingService.calculatePrice(order))).append("\n\n");
+
+            if (order.getComment() != null && order.getComment().length() > 0) {
+                stringBuilder.append(String.format(MESSAGE_COMMENT, order.getComment())).append("\n\n");
+            }
+
+            stringBuilder.append(MESSAGE_WHAT_ELSE);
 
             return constructVkMessage(stringBuilder.toString(), mainKeyboard(productService.getAll(), true));
         }
-        return constructVkMessage(DEFAULT_MESSAGE, mainKeyboard(productService.getAll(), false));
     }
 
-    @Lookup
-    public HomeVkMessageHandler getHomeVkMessageHandler() {
-        return null;
+    @Override
+    public Message onMessage(Message message, Chatter<Message> chatter) {
+        if (!order.isEmpty()) {
+            //continue to payment
+            if (message.getText().equals(ACTION_TO_PAYMENT)) {
+                PaymentVkMessageHandler paymentVkMessageHandler = getPaymentVkMessageHandler();
+                paymentVkMessageHandler.setOrder(order);
+                return proceedToNewMessageHandler(message.getFromId(), paymentVkMessageHandler, chatter);
+            }
+        }
+
+        //add product
+        if (productService.getAll().stream().anyMatch(product -> message.getText().equals(product.getName()))) {
+            OrderProductVkMessageHandler orderProductVkMessageHandler = getOrderProductVkMessageHandler();
+            orderProductVkMessageHandler.setOrder(order);
+            orderProductVkMessageHandler.setProduct(productService.getProduct(message.getText()).orElseThrow(
+                    () -> new RuntimeException("СМЕРТ"))
+            );
+            return proceedToNewMessageHandler(message.getFromId(), orderProductVkMessageHandler, chatter);
+        }
+
+        //comment order
+        if (message.getText().equalsIgnoreCase(ACTION_COMMENT)) {
+            CommentOrderVkMessageHandler commentOrderVkMessageHandler = getCommentOrderVkMessageHandler();
+            commentOrderVkMessageHandler.setOrder(order);
+            return proceedToNewMessageHandler(message.getFromId(), commentOrderVkMessageHandler, chatter);
+        }
+
+        //cancel order
+        if (message.getText().equalsIgnoreCase(ACTION_CANCEL)) {
+            chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
+            return constructVkMessage(MESSAGE_ON_CANCEL, HomeVkMessageHandler.keyboard());
+        }
+
+        return getDefaultMessage();
     }
 
     public static Keyboard mainKeyboard(List<Product> products, boolean orderButton) {
@@ -111,20 +133,60 @@ public class OrderVkMessageHandler extends VkMessageHandler {
             buttons.add(row1);
         }
 
+        List<KeyboardButton> row2 = new ArrayList<>();
+        row2.add(
+                new KeyboardButton().setAction(
+                        new KeyboardButtonAction()
+                                .setLabel(ACTION_COMMENT)
+                                .setType(KeyboardButtonActionType.TEXT)
+                ).setColor(KeyboardButtonColor.DEFAULT)
+        );
+        buttons.add(row2);
+
         if (orderButton) {
-            List<KeyboardButton> row2 = new ArrayList<>();
-            row2.add(
+            List<KeyboardButton> row3 = new ArrayList<>();
+            row3.add(
                     new KeyboardButton().setAction(
                             new KeyboardButtonAction()
-                                    .setLabel("Сделать заказ")
+                                    .setLabel(ACTION_TO_PAYMENT)
                                     .setType(KeyboardButtonActionType.TEXT)
                     ).setColor(KeyboardButtonColor.PRIMARY)
             );
-            buttons.add(row2);
+            buttons.add(row3);
         }
+
+        List<KeyboardButton> row4 = new ArrayList<>();
+        row4.add(
+                new KeyboardButton().setAction(
+                        new KeyboardButtonAction()
+                                .setLabel(ACTION_CANCEL)
+                                .setType(KeyboardButtonActionType.TEXT)
+                ).setColor(KeyboardButtonColor.NEGATIVE)
+        );
+        buttons.add(row4);
 
         keyboard.setButtons(buttons);
         keyboard.setOneTime(true);
         return keyboard;
+    }
+
+    @Lookup
+    public HomeVkMessageHandler getHomeVkMessageHandler() {
+        return null;
+    }
+
+    @Lookup
+    public CommentOrderVkMessageHandler getCommentOrderVkMessageHandler() {
+        return null;
+    }
+
+    @Lookup
+    public OrderProductVkMessageHandler getOrderProductVkMessageHandler() {
+        return null;
+    }
+
+    @Lookup
+    public PaymentVkMessageHandler getPaymentVkMessageHandler() {
+        return null;
     }
 }

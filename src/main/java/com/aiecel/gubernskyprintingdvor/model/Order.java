@@ -49,4 +49,8 @@ public class Order {
         }
         orderedProducts.add(orderedProduct);
     }
+
+    public boolean isEmpty() {
+        return orderedDocuments.size() == 0 && orderedProducts.size() == 0 && (comment == null || comment.length() == 0);
+    }
 }
