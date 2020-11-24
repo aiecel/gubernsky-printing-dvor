@@ -22,7 +22,7 @@ public class OrderedDocument implements OrderedItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id")
     private Document document;
 

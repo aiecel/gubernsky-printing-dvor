@@ -31,6 +31,6 @@ public class Feedback {
 
     @Override
     public String toString() {
-        return text.length() > MAX_TO_STRING_LENGTH ? text.substring(0, MAX_TO_STRING_LENGTH) : text;
+        return text.length() > MAX_TO_STRING_LENGTH ? text.substring(0, MAX_TO_STRING_LENGTH) + "..." : text ;
     }
 }

@@ -20,7 +20,7 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private VkUser owner;
+    private User owner;
 
     private String title;
 
