@@ -2,12 +2,11 @@ package com.aiecel.gubernskyprintingdvor.util.document;
 
 import com.aiecel.gubernskyprintingdvor.exception.DocumentBuildException;
 import com.aiecel.gubernskyprintingdvor.model.Document;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class DocxDocumentBuilder extends AbstractDocumentBuilder {
+public class PdfDocumentBuilder extends AbstractDocumentBuilder {
     @Override
     public Document build() throws DocumentBuildException {
         if (getDocument().getData() == null || getDocument().getData().length == 0) {
@@ -15,8 +14,8 @@ public class DocxDocumentBuilder extends AbstractDocumentBuilder {
         }
 
         try {
-            XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(getDocument().getData()));
-            getDocument().setPages(doc.getProperties().getExtendedProperties().getUnderlyingProperties().getPages());
+            PDDocument doc = PDDocument.load(getDocument().getData());
+            getDocument().setPages(doc.getNumberOfPages());
             doc.close();
             return getDocument();
         } catch (IOException e) {
