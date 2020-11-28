@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -151,11 +152,28 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     private boolean isMessageContainsGreetings(String message) {
         String messageLowerCase = message.toLowerCase();
 
-        return messageLowerCase.contains("привет") ||
-                messageLowerCase.contains("здарова") ||
-                messageLowerCase.contains("здоров") ||
-                messageLowerCase.contains("здравс") ||
-                messageLowerCase.equals("ку");
+        String[] greetingsToContainsCheck = new String[] {
+                "прив",
+                "добрый ден",
+                "добрый вечер",
+                "салам",
+                "даров",
+                "доров",
+                "здрав",
+                "хай",
+                "hello",
+                "иншалла",
+                "дратути",
+                "вечер в хату",
+                "привѣт",
+                "хелло",
+        };
+
+        String[] greetingsToEqualsCheck = new String[] {
+                "ку", "hi"
+        };
+
+        return Arrays.stream(greetingsToContainsCheck).anyMatch(messageLowerCase::contains) || Arrays.stream(greetingsToEqualsCheck).allMatch(messageLowerCase::equals);
     }
 
     @Lookup
