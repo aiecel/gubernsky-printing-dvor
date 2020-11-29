@@ -1,5 +1,4 @@
-$header-font: Oranienbaum, serif;
-$default-font: Roboto Slab, serif;
+@import "variable.scss";
 
 button:focus {
   outline: none;
@@ -10,14 +9,16 @@ button:focus {
 }
 
 .navbar {
-  border-bottom: 1px solid #1d1d1f;
+  border-bottom: 1px solid $default-color;
   width: 100%;
 }
 
 .navbar-brand {
-  font-size: 1.8rem;
-  font-weight: bold;
-  font-family: $header-font;
+  font : {
+    size : 1.8rem;
+    weight: bold;
+    family: $header-font;
+  }
   user-select: none;
 }
 
@@ -26,21 +27,23 @@ button:focus {
 }
 
 .navbar-nav > li {
-  padding-left: 0.68em;
-  padding-right: 0.68em;
+  padding: {
+    left: 0.68em;
+    right: 0.68em;
+  };
   font-size: 1.1rem;
 }
 
 .navbar-light {
   .navbar-toggler {
     border-color: white;
-    color: #1d1d1f;
+    color: $default-color;
   }
 
   .navbar-nav .nav-link {
     &:focus, &:hover {
       text-decoration: underline;
-      color: #1d1d1f;
+      color: $default-color;
     }
   }
 }

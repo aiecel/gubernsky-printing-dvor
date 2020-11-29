@@ -1,0 +1,26 @@
+#section-title-header {
+    margin: 6vmin auto 2vmin auto;
+    text-align: center;
+    white-space: nowrap;
+    font-family: Oranienbaum, serif;
+    font-size: 8vmin;
+}
+
+#section-title-picture {
+    display: block;
+    margin: auto;
+    width: 60vmin;
+    -webkit-user-drag: none;
+}
+
+#section-title a {
+    display: block;
+    margin: 5vmin auto 4vmin auto;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 2.8vmin;
+    white-space: nowrap;
+    color: #0052a3;
+}
+
+/*# sourceMappingURL=index.css.map */
