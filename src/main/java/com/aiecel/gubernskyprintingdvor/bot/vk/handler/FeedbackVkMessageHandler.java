@@ -1,15 +1,13 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.service.FeedbackService;
 import com.vk.api.sdk.objects.messages.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -66,50 +64,28 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard toHomeHandlerKeyboard() {
-        Keyboard keyboard = new Keyboard();
-
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        return new VkKeyboardBuilder()
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_HOME_HANDLER)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
-        );
-
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(row1);
-
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.NEGATIVE))
+                .build();
     }
 
     public static Keyboard confirmSendingKeyboard() {
-        Keyboard keyboard = new Keyboard();
-
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        return new VkKeyboardBuilder()
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CONFIRM_SENDING)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.POSITIVE)
-        );
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.POSITIVE), 0, 0)
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_HOME_HANDLER)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
-        );
-
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(row1);
-
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.NEGATIVE), 0, 1)
+                .build();
     }
 
     @Lookup

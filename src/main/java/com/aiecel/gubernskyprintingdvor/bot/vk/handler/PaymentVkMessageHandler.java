@@ -1,6 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderStatus;
 import com.aiecel.gubernskyprintingdvor.service.OrderService;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -23,12 +22,12 @@ import java.util.List;
 public class PaymentVkMessageHandler extends VkMessageHandler {
     public static final String MESSAGE_TITLE =
             "\uD83D\uDC46\uD83C\uDFFB О плате глаголятъ либо добро, либо никак.\n" +
-            "Мы не стыдимся и говорим так, как есть";
+                    "Мы не стыдимся и говорим так, как есть";
 
     public static final String MESSAGE_TOTAL = "\uD83D\uDCB0 Итого к оплате: %s руб.";
     public static final String MESSAGE_NO_DEBT =
             "\uD83D\uDE0E У васъ нет долгов! \n" +
-            "С радованием предоставимъ вам бумагу в долг!";
+                    "С радованием предоставимъ вам бумагу в долг!";
 
     public static final String MESSAGE_SMALL_DEBT =
             "\uD83D\uDE11 Вашъ долг составляетъ %s руб. \n" +
@@ -112,54 +111,37 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard keyboard(boolean debtButton) {
-        Keyboard keyboard = new Keyboard();
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
+        VkKeyboardBuilder keyboardBuilder = new VkKeyboardBuilder();
 
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
-                                .setLabel("vk pay button")
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.PRIMARY)
+        keyboardBuilder.add(new KeyboardButton()
+                .setAction(new KeyboardButtonAction()
+                        .setLabel("vk pay button")
+                        .setType(KeyboardButtonActionType.TEXT))
+                .setColor(KeyboardButtonColor.PRIMARY)
         );
-        buttons.add(row1);
 
         if (debtButton) {
-            List<KeyboardButton> row2 = new ArrayList<>();
-            row2.add(
-                    new KeyboardButton().setAction(
-                            new KeyboardButtonAction()
-                                    .setLabel(ACTION_DEBT)
-                                    .setType(KeyboardButtonActionType.TEXT)
-                    ).setColor(KeyboardButtonColor.PRIMARY)
+            keyboardBuilder.add(new KeyboardButton()
+                    .setAction(new KeyboardButtonAction()
+                            .setLabel(ACTION_DEBT)
+                            .setType(KeyboardButtonActionType.TEXT))
+                    .setColor(KeyboardButtonColor.PRIMARY)
             );
-            buttons.add(row2);
         }
 
-        List<KeyboardButton> row3 = new ArrayList<>();
-        row3.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        keyboardBuilder
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_ORDER)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.DEFAULT)
-        );
-        buttons.add(row3);
-
-        List<KeyboardButton> row4 = new ArrayList<>();
-        row4.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.DEFAULT))
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CANCEL)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
-        );
-        buttons.add(row4);
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.NEGATIVE));
 
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+        return keyboardBuilder.build();
     }
 
     private Message proceedToOrderVkMessageHandler(int vkId, Chatter<Message> chatter) {

@@ -77,6 +77,7 @@ public class OrderProductVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard keyboard() {
+
         Keyboard keyboard = new Keyboard();
 
         List<KeyboardButton> row1 = new ArrayList<>();

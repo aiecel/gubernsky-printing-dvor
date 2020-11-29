@@ -1,6 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.Document;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
@@ -10,9 +11,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -85,33 +83,18 @@ public class OrderDocumentVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard keyboard() {
-        Keyboard keyboard = new Keyboard();
-
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        return new VkKeyboardBuilder()
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CHECK_PRICE)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.DEFAULT)
-        );
-
-        List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.DEFAULT))
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CANCEL)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
-        );
-
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(row1);
-        buttons.add(row2);
-
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.NEGATIVE))
+                .build();
     }
 
     private Message proceedToOrderVkMessageHandler(int vkId, Chatter<Message> chatter) {

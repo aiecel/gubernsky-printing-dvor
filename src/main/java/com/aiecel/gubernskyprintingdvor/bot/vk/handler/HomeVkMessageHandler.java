@@ -1,6 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,51 +108,27 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard keyboard() {
-        Keyboard keyboard = new Keyboard();
-
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        return new VkKeyboardBuilder()
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_ORDER)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.PRIMARY)
-        );
-
-        List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(
-                new KeyboardButton()
-                        .setAction(
-                                new KeyboardButtonAction()
-                                        .setLabel(ACTION_ORDERS_LIST)
-                                        .setType(KeyboardButtonActionType.TEXT)
-                        )
-        );
-
-        List<KeyboardButton> row3 = new ArrayList<>();
-        row3.add(
-                new KeyboardButton()
-                        .setAction(
-                                new KeyboardButtonAction()
-                                        .setLabel(ACTION_FEEDBACK)
-                                        .setType(KeyboardButtonActionType.TEXT)
-                        )
-        );
-
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(row1);
-        buttons.add(row2);
-        buttons.add(row3);
-
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.PRIMARY))
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
+                                .setLabel(ACTION_ORDERS_LIST)
+                                .setType(KeyboardButtonActionType.TEXT)))
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
+                                .setLabel(ACTION_FEEDBACK)
+                                .setType(KeyboardButtonActionType.TEXT)))
+                .build();
     }
 
     private boolean isMessageContainsGreetings(String message) {
         String messageLowerCase = message.toLowerCase();
 
-        String[] greetingsToContainsCheck = new String[] {
+        String[] greetingsToContainsCheck = new String[]{
                 "прив",
                 "добрый ден",
                 "добрый вечер",
@@ -169,7 +145,7 @@ public class HomeVkMessageHandler extends VkMessageHandler {
                 "хелло",
         };
 
-        String[] greetingsToEqualsCheck = new String[] {
+        String[] greetingsToEqualsCheck = new String[]{
                 "ку", "hi"
         };
 

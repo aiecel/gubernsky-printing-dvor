@@ -1,6 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.exception.FileDownloadException;
 import com.aiecel.gubernskyprintingdvor.exception.DocumentBuildException;
 import com.aiecel.gubernskyprintingdvor.exception.ExtensionNotSupportedException;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -166,59 +166,48 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         return getDefaultMessage();
     }
 
-    public static Keyboard mainKeyboard(List<Product> products, boolean orderButton) {
-        Keyboard keyboard = new Keyboard();
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
+    public static Keyboard mainKeyboard(List<Product> products, boolean paymentButton) {
+        VkKeyboardBuilder keyboardBuilder = new VkKeyboardBuilder();
 
-        if (products.size() > 0) {
-            List<KeyboardButton> row1 = new ArrayList<>();
-            products.forEach(product ->
-                    row1.add(
-                            new KeyboardButton().setAction(
-                                    new KeyboardButtonAction()
-                                            .setLabel(product.getName())
-                                            .setType(KeyboardButtonActionType.TEXT)
-                            )
-                    )
-            );
-            buttons.add(row1);
+        //products buttons
+        for (int i = 0; i < products.size() && i < 5; i++) {
+            keyboardBuilder.add(
+                    new KeyboardButton()
+                            .setAction(new KeyboardButtonAction()
+                                    .setLabel(products.get(i).getName())
+                                    .setType(KeyboardButtonActionType.TEXT)),
+                    0, i);
         }
 
-        List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
-                                .setLabel(ACTION_COMMENT)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.DEFAULT)
-        );
-        buttons.add(row2);
+        //todo add "more products" button
 
-        if (orderButton) {
-            List<KeyboardButton> row3 = new ArrayList<>();
-            row3.add(
-                    new KeyboardButton().setAction(
-                            new KeyboardButtonAction()
-                                    .setLabel(ACTION_TO_PAYMENT)
-                                    .setType(KeyboardButtonActionType.TEXT)
-                    ).setColor(KeyboardButtonColor.PRIMARY)
+        //comment button
+        keyboardBuilder.add(new KeyboardButton()
+                .setAction(new KeyboardButtonAction()
+                        .setLabel(ACTION_COMMENT)
+                        .setType(KeyboardButtonActionType.TEXT))
+                .setColor(KeyboardButtonColor.DEFAULT)
+        );
+
+        //payment button
+        if (paymentButton) {
+            keyboardBuilder.add(new KeyboardButton()
+                    .setAction(new KeyboardButtonAction()
+                            .setLabel(ACTION_TO_PAYMENT)
+                            .setType(KeyboardButtonActionType.TEXT))
+                    .setColor(KeyboardButtonColor.PRIMARY)
             );
-            buttons.add(row3);
         }
 
-        List<KeyboardButton> row4 = new ArrayList<>();
-        row4.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
-                                .setLabel(ACTION_CANCEL)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
+        //cancel button
+        keyboardBuilder.add(new KeyboardButton()
+                .setAction(new KeyboardButtonAction()
+                        .setLabel(ACTION_CANCEL)
+                        .setType(KeyboardButtonActionType.TEXT))
+                .setColor(KeyboardButtonColor.NEGATIVE)
         );
-        buttons.add(row4);
 
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+        return keyboardBuilder.build();
     }
 
     @Lookup
