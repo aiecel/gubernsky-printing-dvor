@@ -1,3 +1,6 @@
+$header-font: Oranienbaum, serif;
+$default-font: Roboto Slab, serif;
+
 button:focus {
   outline: none;
 }
@@ -14,7 +17,7 @@ button:focus {
 .navbar-brand {
   font-size: 1.8rem;
   font-weight: bold;
-  font-family: Oranienbaum, serif;
+  font-family: $header-font;
   user-select: none;
 }
 
@@ -70,5 +73,3 @@ button:focus {
 .form-group {
   width: auto;
 }
-
-/*# sourceMappingURL=custom.css.map */

@@ -87,6 +87,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>com.gitlab.haynes</groupId>
+                <artifactId>libsass-maven-plugin</artifactId>
+                <version>0.2.26</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <inputPath>${basedir}/src/main/resources/static/scss/</inputPath>
+                    <outputPath>${basedir}/src/main/resources/static/css/</outputPath>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
