@@ -1,3 +1,7 @@
+$primary-font: Roboto Slab, serif
+$Header-font: Oranienbaum, serif
+$primary-color: #1d1d1f
+
 button:focus
   outline: none
 
@@ -5,13 +9,13 @@ button:focus
   display: none
 
 .navbar
-  border-bottom: 1px solid #1d1d1f
+  border-bottom: 1px solid $primary-color
   width: 100%
 
 .navbar-brand
   font-size: 1.8rem
   font-weight: bold
-  font-family: Oranienbaum, serif
+  font-family: $Header-font
   user-select: none
 
 .nav-link
@@ -25,12 +29,12 @@ button:focus
 .navbar-light
   .navbar-toggler
     border-color: white
-    color: #1d1d1f
+    color: $primary-color
 
   .navbar-nav .nav-link
     &:focus, &:hover
       text-decoration: underline
-      color: #1d1d1f
+      color: $primary-color
 
 @media (max-width: 991.78px)
   .hidden
