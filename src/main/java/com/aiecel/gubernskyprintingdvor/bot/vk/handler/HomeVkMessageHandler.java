@@ -1,7 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
@@ -9,7 +9,7 @@ import com.aiecel.gubernskyprintingdvor.model.VkUser;
 import com.aiecel.gubernskyprintingdvor.service.OrderService;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.objects.messages.*;
-import org.springframework.beans.factory.annotation.Lookup;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +18,7 @@ import java.util.List;
 
 @Component
 @Scope("prototype")
+@AllArgsConstructor
 public class HomeVkMessageHandler extends VkMessageHandler {
     public static final String DEFAULT_MESSAGE =
             "Губернский Печатный Дворъ привѣтствуетъ тебя, засельщина земли Губернской! \n" +
@@ -40,11 +41,6 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     public final VkUserService vkUserService;
     public final OrderService orderService;
 
-    public HomeVkMessageHandler(VkUserService vkUserService, OrderService orderService) {
-        this.vkUserService = vkUserService;
-        this.orderService = orderService;
-    }
-
     @Override
     public Message getDefaultMessage() {
         return constructVkMessage(DEFAULT_MESSAGE, keyboard());
@@ -54,7 +50,7 @@ public class HomeVkMessageHandler extends VkMessageHandler {
     public Message onMessage(Message message, Chatter<Message> chatter) {
         //proceed to order handler
         if (message.getText().equals(ACTION_ORDER)) {
-            OrderVkMessageHandler messageHandler = getOrderVkMessageHandler();
+            OrderVkMessageHandler messageHandler = messageHandlerFactory().get(OrderVkMessageHandler.class);
             messageHandler.setVkUserId(message.getFromId());
             return proceedToNewMessageHandler(message.getFromId(), messageHandler, chatter);
         }
@@ -90,13 +86,15 @@ public class HomeVkMessageHandler extends VkMessageHandler {
                 }
                 return constructVkMessage(orderStringBuilder.toString(), keyboard());
             }
-
-            return proceedToNewMessageHandler(message.getFromId(), getFeedbackVkMessageHandler(), chatter);
         }
 
         //proceed to feedback handler
         if (message.getText().equals(ACTION_FEEDBACK)) {
-            return proceedToNewMessageHandler(message.getFromId(), getFeedbackVkMessageHandler(), chatter);
+            return proceedToNewMessageHandler(
+                    message.getFromId(),
+                    messageHandlerFactory().get(FeedbackVkMessageHandler.class),
+                    chatter
+            );
         }
 
         //greetings
@@ -107,8 +105,8 @@ public class HomeVkMessageHandler extends VkMessageHandler {
         return constructVkMessage(DEFAULT_MESSAGE, keyboard());
     }
 
-    public static Keyboard keyboard() {
-        return new VkKeyboardBuilder()
+    public Keyboard keyboard() {
+        return new KeyboardBuilder()
                 .add(new KeyboardButton()
                         .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_ORDER)
@@ -150,15 +148,5 @@ public class HomeVkMessageHandler extends VkMessageHandler {
         };
 
         return Arrays.stream(greetingsToContainsCheck).anyMatch(messageLowerCase::contains) || Arrays.stream(greetingsToEqualsCheck).allMatch(messageLowerCase::equals);
-    }
-
-    @Lookup
-    public OrderVkMessageHandler getOrderVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public FeedbackVkMessageHandler getFeedbackVkMessageHandler() {
-        return null;
     }
 }

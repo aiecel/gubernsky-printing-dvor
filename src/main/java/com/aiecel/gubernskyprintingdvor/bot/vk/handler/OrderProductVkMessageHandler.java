@@ -1,12 +1,10 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
 import com.aiecel.gubernskyprintingdvor.model.Product;
 import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @Component
 @Scope("prototype")
 @Setter
-public class OrderProductVkMessageHandler extends VkMessageHandler {
+public class OrderProductVkMessageHandler extends OrderDependedVkMessageHandler {
     public static final String MESSAGE_ASK_QUANTITY = "Сколько пожелаете?";
     public static final String MESSAGE_ASK_QUANTITY_AGAIN = "Сколько ещё разъ?";
     public static final String MESSAGE_ZERO_QUANTITY = "Ну, ноль так ноль. Что-то ещё?"; //not used for now
@@ -26,7 +24,6 @@ public class OrderProductVkMessageHandler extends VkMessageHandler {
     public static final String ACTION_CANCEL = "\uD83D\uDEAB Ладно, не буду";
     public static final String ACTION_CHECK_PRICE = "\uD83D\uDC40 А по чёмъ штука?";
 
-    private Order order;
     private Product product;
 
     @Override
@@ -67,8 +64,8 @@ public class OrderProductVkMessageHandler extends VkMessageHandler {
             OrderedProduct orderedProduct = new OrderedProduct();
             orderedProduct.setProduct(product);
             orderedProduct.setQuantity(quantity);
-            orderedProduct.setOrder(order);
-            order.addOrderedProduct(orderedProduct);
+            orderedProduct.setOrder(getOrder());
+            getOrder().addOrderedProduct(orderedProduct);
 
             return proceedToOrderVkMessageHandler(message.getFromId(), chatter);
         } catch (NumberFormatException e) {
@@ -105,17 +102,5 @@ public class OrderProductVkMessageHandler extends VkMessageHandler {
         keyboard.setButtons(buttons);
         keyboard.setOneTime(true);
         return keyboard;
-    }
-
-    private Message proceedToOrderVkMessageHandler(int vkId, Chatter<Message> chatter) {
-        OrderVkMessageHandler orderVkMessageHandler = getOrderVkMessageHandler();
-        orderVkMessageHandler.setOrder(order);
-        chatter.setMessageHandler(vkId, orderVkMessageHandler);
-        return orderVkMessageHandler.getDefaultMessage();
-    }
-
-    @Lookup
-    public OrderVkMessageHandler getOrderVkMessageHandler() {
-        return null;
     }
 }

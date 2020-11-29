@@ -1,21 +1,19 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.Document;
-import com.aiecel.gubernskyprintingdvor.model.Order;
 import com.aiecel.gubernskyprintingdvor.model.OrderedDocument;
 import com.aiecel.gubernskyprintingdvor.service.ProductService;
 import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
 @Setter
-public class OrderDocumentVkMessageHandler extends VkMessageHandler {
+public class OrderDocumentVkMessageHandler extends OrderDependedVkMessageHandler {
     public static final String MESSAGE_DOCUMENT = "Документъ \"%s\", листовъ: %s";
     public static final String MESSAGE_ASK_QUANTITY = "Сколько копий пожелаете?";
     public static final String MESSAGE_ASK_QUANTITY_AGAIN = "Сколько ещё разъ?";
@@ -28,7 +26,6 @@ public class OrderDocumentVkMessageHandler extends VkMessageHandler {
 
     private final ProductService productService;
 
-    private Order order;
     private Document document;
 
     public OrderDocumentVkMessageHandler(ProductService productService) {
@@ -73,8 +70,8 @@ public class OrderDocumentVkMessageHandler extends VkMessageHandler {
             OrderedDocument orderedDocument = new OrderedDocument();
             orderedDocument.setDocument(document);
             orderedDocument.setQuantity(quantity);
-            orderedDocument.setOrder(order);
-            order.getOrderedDocuments().add(orderedDocument);
+            orderedDocument.setOrder(getOrder());
+            getOrder().getOrderedDocuments().add(orderedDocument);
 
             return proceedToOrderVkMessageHandler(message.getFromId(), chatter);
         } catch (NumberFormatException e) {
@@ -83,7 +80,7 @@ public class OrderDocumentVkMessageHandler extends VkMessageHandler {
     }
 
     public static Keyboard keyboard() {
-        return new VkKeyboardBuilder()
+        return new KeyboardBuilder()
                 .add(new KeyboardButton()
                         .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CHECK_PRICE)
@@ -95,17 +92,5 @@ public class OrderDocumentVkMessageHandler extends VkMessageHandler {
                                 .setType(KeyboardButtonActionType.TEXT))
                         .setColor(KeyboardButtonColor.NEGATIVE))
                 .build();
-    }
-
-    private Message proceedToOrderVkMessageHandler(int vkId, Chatter<Message> chatter) {
-        OrderVkMessageHandler orderVkMessageHandler = getOrderVkMessageHandler();
-        orderVkMessageHandler.setOrder(order);
-        chatter.setMessageHandler(vkId, orderVkMessageHandler);
-        return orderVkMessageHandler.getDefaultMessage();
-    }
-
-    @Lookup
-    public OrderVkMessageHandler getOrderVkMessageHandler() {
-        return null;
     }
 }

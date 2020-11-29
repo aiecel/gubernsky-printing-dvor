@@ -1,11 +1,9 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.service.FeedbackService;
 import com.vk.api.sdk.objects.messages.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +26,6 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
     private final FeedbackService feedbackService;
     private final StringBuilder feedbackTextBuilder;
 
-    @Autowired
     public FeedbackVkMessageHandler(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
         this.feedbackTextBuilder = new StringBuilder();
@@ -36,60 +33,54 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
 
     @Override
     public Message getDefaultMessage() {
-        return constructVkMessage(DEFAULT_MESSAGE, toHomeHandlerKeyboard());
+        return constructVkMessage(DEFAULT_MESSAGE, keyboard());
     }
 
     @Override
     public Message onMessage(Message message, Chatter<Message> chatter) {
         //back to home handler
         if (message.getText().equals(ACTION_BACK_TO_HOME_HANDLER)) {
-            chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-            return constructVkMessage(MESSAGE_CANCEL_SENDING, HomeVkMessageHandler.keyboard());
+            HomeVkMessageHandler homeVkMessageHandler = messageHandlerFactory().get(HomeVkMessageHandler.class);
+            chatter.setMessageHandler(message.getFromId(), homeVkMessageHandler);
+            return constructVkMessage(MESSAGE_CANCEL_SENDING, homeVkMessageHandler.keyboard());
         }
 
         if (message.getText().equals(ACTION_CONFIRM_SENDING) && feedbackTextBuilder.length() > 0) {
             //confirm sending
             feedbackService.save(feedbackTextBuilder.toString());
-            chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-            return constructVkMessage(MESSAGE_FEEDBACK_SENT, HomeVkMessageHandler.keyboard());
+            HomeVkMessageHandler homeVkMessageHandler = messageHandlerFactory().get(HomeVkMessageHandler.class);
+            chatter.setMessageHandler(message.getFromId(), homeVkMessageHandler);
+            return constructVkMessage(MESSAGE_FEEDBACK_SENT, homeVkMessageHandler.keyboard());
         } else {
             //append text
             if (feedbackTextBuilder.length() > 0) feedbackTextBuilder.append("; ");
             feedbackTextBuilder.append(message.getText());
             return constructVkMessage(
                     "\"" + feedbackTextBuilder.toString() + "\"\n\n" + MESSAGE_CONFIRM_SENDING,
-                    confirmSendingKeyboard()
+                    keyboard()
             );
         }
     }
 
-    public static Keyboard toHomeHandlerKeyboard() {
-        return new VkKeyboardBuilder()
-                .add(new KeyboardButton()
+    private Keyboard keyboard() {
+        KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
+
+        if (feedbackTextBuilder.length() > 0) {
+            keyboardBuilder.add(
+                    new KeyboardButton()
+                            .setAction(new KeyboardButtonAction()
+                                    .setLabel(ACTION_CONFIRM_SENDING)
+                                    .setType(KeyboardButtonActionType.TEXT))
+                            .setColor(KeyboardButtonColor.POSITIVE), 0, 0);
+        }
+
+        keyboardBuilder.add(
+                new KeyboardButton()
                         .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_BACK_TO_HOME_HANDLER)
                                 .setType(KeyboardButtonActionType.TEXT))
-                        .setColor(KeyboardButtonColor.NEGATIVE))
-                .build();
-    }
+                        .setColor(KeyboardButtonColor.NEGATIVE), 0, 1);
 
-    public static Keyboard confirmSendingKeyboard() {
-        return new VkKeyboardBuilder()
-                .add(new KeyboardButton()
-                        .setAction(new KeyboardButtonAction()
-                                .setLabel(ACTION_CONFIRM_SENDING)
-                                .setType(KeyboardButtonActionType.TEXT))
-                        .setColor(KeyboardButtonColor.POSITIVE), 0, 0)
-                .add(new KeyboardButton()
-                        .setAction(new KeyboardButtonAction()
-                                .setLabel(ACTION_BACK_TO_HOME_HANDLER)
-                                .setType(KeyboardButtonActionType.TEXT))
-                        .setColor(KeyboardButtonColor.NEGATIVE), 0, 1)
-                .build();
-    }
-
-    @Lookup
-    public HomeVkMessageHandler getHomeVkMessageHandler() {
-        return null;
+        return keyboardBuilder.build();
     }
 }

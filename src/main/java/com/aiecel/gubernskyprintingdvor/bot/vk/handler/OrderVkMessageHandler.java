@@ -1,7 +1,7 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.exception.FileDownloadException;
 import com.aiecel.gubernskyprintingdvor.exception.DocumentBuildException;
 import com.aiecel.gubernskyprintingdvor.exception.ExtensionNotSupportedException;
@@ -12,7 +12,6 @@ import com.aiecel.gubernskyprintingdvor.service.ProductService;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.objects.docs.Doc;
 import com.vk.api.sdk.objects.messages.*;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -105,7 +104,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         if (!order.isEmpty()) {
             //continue to payment
             if (message.getText().equals(ACTION_TO_PAYMENT)) {
-                PaymentVkMessageHandler paymentVkMessageHandler = getPaymentVkMessageHandler();
+                PaymentVkMessageHandler paymentVkMessageHandler = messageHandlerFactory().get(PaymentVkMessageHandler.class);
                 paymentVkMessageHandler.setOrder(order);
                 return proceedToNewMessageHandler(message.getFromId(), paymentVkMessageHandler, chatter);
             }
@@ -126,7 +125,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
                 try {
                     Document document = documentService.constructDocument(doc.getTitle(), doc.getExt(), doc.getUrl());
                     document.setOwner(order.getCustomer());
-                    OrderDocumentVkMessageHandler orderDocumentVkMessageHandler = getOrderDocumentVkMessageHandler();
+                    OrderDocumentVkMessageHandler orderDocumentVkMessageHandler = messageHandlerFactory().get(OrderDocumentVkMessageHandler.class);
                     orderDocumentVkMessageHandler.setOrder(order);
                     orderDocumentVkMessageHandler.setDocument(document);
                     return proceedToNewMessageHandler(message.getFromId(), orderDocumentVkMessageHandler, chatter);
@@ -142,7 +141,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
 
         //add product
         if (productService.getAll().stream().anyMatch(product -> message.getText().equals(product.getName()))) {
-            OrderProductVkMessageHandler orderProductVkMessageHandler = getOrderProductVkMessageHandler();
+            OrderProductVkMessageHandler orderProductVkMessageHandler = messageHandlerFactory().get(OrderProductVkMessageHandler.class);
             orderProductVkMessageHandler.setOrder(order);
             orderProductVkMessageHandler.setProduct(productService.getProduct(message.getText()).orElseThrow(
                     () -> new RuntimeException("СМЕРТ"))
@@ -152,22 +151,23 @@ public class OrderVkMessageHandler extends VkMessageHandler {
 
         //comment order
         if (message.getText().equalsIgnoreCase(ACTION_COMMENT)) {
-            CommentOrderVkMessageHandler commentOrderVkMessageHandler = getCommentOrderVkMessageHandler();
+            CommentOrderVkMessageHandler commentOrderVkMessageHandler = messageHandlerFactory().get(CommentOrderVkMessageHandler.class);
             commentOrderVkMessageHandler.setOrder(order);
             return proceedToNewMessageHandler(message.getFromId(), commentOrderVkMessageHandler, chatter);
         }
 
         //cancel order
         if (message.getText().equalsIgnoreCase(ACTION_CANCEL)) {
-            chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-            return constructVkMessage(MESSAGE_ON_CANCEL, HomeVkMessageHandler.keyboard());
+            HomeVkMessageHandler homeVkMessageHandler = messageHandlerFactory().get(HomeVkMessageHandler.class);
+            chatter.setMessageHandler(message.getFromId(), homeVkMessageHandler);
+            return constructVkMessage(MESSAGE_ON_CANCEL, homeVkMessageHandler.keyboard());
         }
 
         return getDefaultMessage();
     }
 
     public static Keyboard mainKeyboard(List<Product> products, boolean paymentButton) {
-        VkKeyboardBuilder keyboardBuilder = new VkKeyboardBuilder();
+        KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
 
         //products buttons
         for (int i = 0; i < products.size() && i < 5; i++) {
@@ -208,30 +208,5 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         );
 
         return keyboardBuilder.build();
-    }
-
-    @Lookup
-    public HomeVkMessageHandler getHomeVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public CommentOrderVkMessageHandler getCommentOrderVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public OrderDocumentVkMessageHandler getOrderDocumentVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public OrderProductVkMessageHandler getOrderProductVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public PaymentVkMessageHandler getPaymentVkMessageHandler() {
-        return null;
     }
 }

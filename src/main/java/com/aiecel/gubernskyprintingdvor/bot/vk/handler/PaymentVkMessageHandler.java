@@ -1,15 +1,13 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
-import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.VkKeyboardBuilder;
-import com.aiecel.gubernskyprintingdvor.model.Order;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.OrderStatus;
 import com.aiecel.gubernskyprintingdvor.service.OrderService;
 import com.aiecel.gubernskyprintingdvor.service.PricingService;
 import com.aiecel.gubernskyprintingdvor.service.UserService;
 import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,7 @@ import java.time.ZonedDateTime;
 @Component
 @Scope("prototype")
 @Setter
-public class PaymentVkMessageHandler extends VkMessageHandler {
+public class PaymentVkMessageHandler extends OrderDependedVkMessageHandler {
     public static final String MESSAGE_TITLE =
             "\uD83D\uDC46\uD83C\uDFFB О плате глаголятъ либо добро, либо никак.\n" +
                     "Мы не стыдимся и говорим так, как есть";
@@ -48,8 +46,6 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
     private final OrderService orderService;
     private final PricingService pricingService;
 
-    private Order order;
-
     public PaymentVkMessageHandler(UserService userService, OrderService orderService, PricingService pricingService) {
         this.userService = userService;
         this.orderService = orderService;
@@ -58,10 +54,10 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
 
     @Override
     public Message getDefaultMessage() {
-        BigDecimal debt = userService.getDebt(order.getCustomer().getId());
+        BigDecimal debt = userService.getDebt(getOrder().getCustomer().getId());
         String message = MESSAGE_TITLE + "\n\n";
 
-        message += String.format(MESSAGE_TOTAL, pricingService.calculatePrice(order));
+        message += String.format(MESSAGE_TOTAL, pricingService.calculatePrice(getOrder()));
 
         message += "\n\n";
 
@@ -85,14 +81,16 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
 
         //debt
         if (message.getText().equalsIgnoreCase(ACTION_DEBT)) {
-            if (userService.getDebt(order.getCustomer().getId()).compareTo(new BigDecimal(30)) < 0) {
-                order.setOrderDateTime(ZonedDateTime.now());
-                order.setPrice(pricingService.calculatePrice(order));
-                order.setPaid(false);
-                order.setStatus(OrderStatus.PENDING);
-                orderService.save(order);
-                chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-                return constructVkMessage(MESSAGE_ON_ORDER, HomeVkMessageHandler.keyboard());
+            if (userService.getDebt(getOrder().getCustomer().getId()).compareTo(new BigDecimal(30)) < 0) {
+                getOrder().setOrderDateTime(ZonedDateTime.now());
+                getOrder().setPrice(pricingService.calculatePrice(getOrder()));
+                getOrder().setPaid(false);
+                getOrder().setStatus(OrderStatus.PENDING);
+                orderService.save(getOrder());
+
+                HomeVkMessageHandler homeVkMessageHandler = messageHandlerFactory().get(HomeVkMessageHandler.class);
+                chatter.setMessageHandler(message.getFromId(), homeVkMessageHandler);
+                return constructVkMessage(MESSAGE_ON_ORDER, homeVkMessageHandler.keyboard());
             }
         }
 
@@ -103,15 +101,16 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
 
         //cancel order
         if (message.getText().equalsIgnoreCase(ACTION_CANCEL)) {
-            chatter.setMessageHandler(message.getFromId(), getHomeVkMessageHandler());
-            return constructVkMessage(MESSAGE_ON_CANCEL, HomeVkMessageHandler.keyboard());
+            HomeVkMessageHandler homeVkMessageHandler = messageHandlerFactory().get(HomeVkMessageHandler.class);
+            chatter.setMessageHandler(message.getFromId(), homeVkMessageHandler);
+            return constructVkMessage(MESSAGE_ON_CANCEL, homeVkMessageHandler.keyboard());
         }
 
         return getDefaultMessage();
     }
 
     public static Keyboard keyboard(boolean debtButton) {
-        VkKeyboardBuilder keyboardBuilder = new VkKeyboardBuilder();
+        KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
 
         keyboardBuilder.add(new KeyboardButton()
                 .setAction(new KeyboardButtonAction()
@@ -142,22 +141,5 @@ public class PaymentVkMessageHandler extends VkMessageHandler {
                         .setColor(KeyboardButtonColor.NEGATIVE));
 
         return keyboardBuilder.build();
-    }
-
-    private Message proceedToOrderVkMessageHandler(int vkId, Chatter<Message> chatter) {
-        OrderVkMessageHandler orderVkMessageHandler = getOrderVkMessageHandler();
-        orderVkMessageHandler.setOrder(order);
-        chatter.setMessageHandler(vkId, orderVkMessageHandler);
-        return orderVkMessageHandler.getDefaultMessage();
-    }
-
-    @Lookup
-    public OrderVkMessageHandler getOrderVkMessageHandler() {
-        return null;
-    }
-
-    @Lookup
-    public HomeVkMessageHandler getHomeVkMessageHandler() {
-        return null;
     }
 }
