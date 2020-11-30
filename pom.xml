@@ -102,7 +102,7 @@
                 </executions>
                 <configuration>
                     <inputPath>${basedir}/src/main/resources/static/scss/</inputPath>
-                    <outputPath>${basedir}/src/main/resources/static/css/</outputPath>
+                    <outputPath>${basedir}/src/main/resources/static/scss/</outputPath>
                 </configuration>
             </plugin>
         </plugins>
