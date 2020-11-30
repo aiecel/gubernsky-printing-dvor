@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <vk.sdk.version>1.0.6</vk.sdk.version>
     </properties>
 
     <dependencies>
@@ -70,8 +71,7 @@
         <dependency>
             <groupId>com.vk.api</groupId>
             <artifactId>sdk</artifactId>
-            <version>1.0.6</version>
-
+            <version>${vk.sdk.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.logging.log4j</groupId>
