@@ -1,15 +1,13 @@
 package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
+import com.aiecel.gubernskyprintingdvor.bot.vk.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskyprintingdvor.model.OrderedProduct;
 import com.aiecel.gubernskyprintingdvor.model.Product;
 import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -28,7 +26,7 @@ public class OrderProductVkMessageHandler extends OrderDependedVkMessageHandler 
 
     @Override
     public Message getDefaultMessage() {
-        return constructVkMessage(MESSAGE_ASK_QUANTITY, keyboard());
+        return constructVkMessage(product.getDescription() + "\n\n" + MESSAGE_ASK_QUANTITY, keyboard());
     }
 
     @Override
@@ -74,33 +72,17 @@ public class OrderProductVkMessageHandler extends OrderDependedVkMessageHandler 
     }
 
     public static Keyboard keyboard() {
-
-        Keyboard keyboard = new Keyboard();
-
-        List<KeyboardButton> row1 = new ArrayList<>();
-        row1.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+        return new KeyboardBuilder()
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CHECK_PRICE)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.DEFAULT)
-        );
-
-        List<KeyboardButton> row2 = new ArrayList<>();
-        row2.add(
-                new KeyboardButton().setAction(
-                        new KeyboardButtonAction()
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.DEFAULT))
+                .add(new KeyboardButton()
+                        .setAction(new KeyboardButtonAction()
                                 .setLabel(ACTION_CANCEL)
-                                .setType(KeyboardButtonActionType.TEXT)
-                ).setColor(KeyboardButtonColor.NEGATIVE)
-        );
-
-        List<List<KeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(row1);
-        buttons.add(row2);
-
-        keyboard.setButtons(buttons);
-        keyboard.setOneTime(true);
-        return keyboard;
+                                .setType(KeyboardButtonActionType.TEXT))
+                        .setColor(KeyboardButtonColor.NEGATIVE))
+                .build();
     }
 }
