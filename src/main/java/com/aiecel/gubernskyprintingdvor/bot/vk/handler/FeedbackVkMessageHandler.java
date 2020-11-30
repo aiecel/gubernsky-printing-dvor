@@ -66,20 +66,18 @@ public class FeedbackVkMessageHandler extends VkMessageHandler {
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
 
         if (feedbackTextBuilder.length() > 0) {
-            keyboardBuilder.add(
-                    new KeyboardButton()
-                            .setAction(new KeyboardButtonAction()
-                                    .setLabel(ACTION_CONFIRM_SENDING)
-                                    .setType(KeyboardButtonActionType.TEXT))
-                            .setColor(KeyboardButtonColor.POSITIVE), 0, 0);
+            keyboardBuilder.add(new KeyboardButton()
+                    .setAction(new KeyboardButtonAction()
+                            .setLabel(ACTION_CONFIRM_SENDING)
+                            .setType(KeyboardButtonActionType.TEXT))
+                    .setColor(KeyboardButtonColor.POSITIVE), 0, 0);
         }
 
-        keyboardBuilder.add(
-                new KeyboardButton()
-                        .setAction(new KeyboardButtonAction()
-                                .setLabel(ACTION_BACK_TO_HOME_HANDLER)
-                                .setType(KeyboardButtonActionType.TEXT))
-                        .setColor(KeyboardButtonColor.NEGATIVE), 0, 1);
+        keyboardBuilder.add(new KeyboardButton()
+                .setAction(new KeyboardButtonAction()
+                        .setLabel(ACTION_BACK_TO_HOME_HANDLER)
+                        .setType(KeyboardButtonActionType.TEXT))
+                .setColor(KeyboardButtonColor.NEGATIVE), 0, 1);
 
         return keyboardBuilder.build();
     }

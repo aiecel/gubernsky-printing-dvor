@@ -59,12 +59,11 @@ public class CommentOrderVkMessageHandler extends OrderDependedVkMessageHandler 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
 
         if (commentTextBuilder.length() > 0) {
-            keyboardBuilder
-                    .add(new KeyboardButton()
-                            .setAction(new KeyboardButtonAction()
-                                    .setLabel(ACTION_CONFIRM)
-                                    .setType(KeyboardButtonActionType.TEXT))
-                            .setColor(KeyboardButtonColor.POSITIVE), 0, 0);
+            keyboardBuilder.add(new KeyboardButton()
+                    .setAction(new KeyboardButtonAction()
+                            .setLabel(ACTION_CONFIRM)
+                            .setType(KeyboardButtonActionType.TEXT))
+                    .setColor(KeyboardButtonColor.POSITIVE), 0, 0);
         }
 
         keyboardBuilder.add(new KeyboardButton()

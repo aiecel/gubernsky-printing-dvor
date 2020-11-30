@@ -72,7 +72,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
     @Override
     public Message getDefaultMessage() {
         if (order.isEmpty()) {
-            return constructVkMessage(DEFAULT_MESSAGE, mainKeyboard(productService.getAll(), false));
+            return constructVkMessage(DEFAULT_MESSAGE, keyboard());
         } else {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -95,7 +95,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
 
             stringBuilder.append(MESSAGE_WHAT_ELSE);
 
-            return constructVkMessage(stringBuilder.toString(), mainKeyboard(productService.getAll(), true));
+            return constructVkMessage(stringBuilder.toString(), keyboard());
         }
     }
 
@@ -117,7 +117,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
                     .collect(Collectors.toList());
 
             if (documentAttachments.size() > 1) {
-                return constructVkMessage(MESSAGE_SINGLE_DOCUMENT, mainKeyboard(productService.getAll(), !order.isEmpty()));
+                return constructVkMessage(MESSAGE_SINGLE_DOCUMENT, keyboard());
             }
 
             for (MessageAttachment documentAttachment : documentAttachments) {
@@ -130,11 +130,11 @@ public class OrderVkMessageHandler extends VkMessageHandler {
                     orderDocumentVkMessageHandler.setDocument(document);
                     return proceedToNewMessageHandler(message.getFromId(), orderDocumentVkMessageHandler, chatter);
                 } catch (DocumentBuildException e) {
-                    return constructVkMessage(MESSAGE_DOCUMENT_BUILD_ERROR, mainKeyboard(productService.getAll(), !order.isEmpty()));
+                    return constructVkMessage(MESSAGE_DOCUMENT_BUILD_ERROR, keyboard());
                 } catch (FileDownloadException e) {
-                    return constructVkMessage(MESSAGE_DOCUMENT_DOWNLOAD_ERROR, mainKeyboard(productService.getAll(), !order.isEmpty()));
+                    return constructVkMessage(MESSAGE_DOCUMENT_DOWNLOAD_ERROR, keyboard());
                 } catch (ExtensionNotSupportedException e) {
-                    return constructVkMessage(MESSAGE_DOCUMENT_NOT_SUPPORTED, mainKeyboard(productService.getAll(), !order.isEmpty()));
+                    return constructVkMessage(MESSAGE_DOCUMENT_NOT_SUPPORTED, keyboard());
                 }
             }
         }
@@ -166,8 +166,9 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         return getDefaultMessage();
     }
 
-    public static Keyboard mainKeyboard(List<Product> products, boolean paymentButton) {
+    public Keyboard keyboard() {
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
+        List<Product> products = productService.getAll();
 
         //products buttons
         for (int i = 0; i < products.size() && i < 5; i++) {
@@ -190,7 +191,7 @@ public class OrderVkMessageHandler extends VkMessageHandler {
         );
 
         //payment button
-        if (paymentButton) {
+        if (!order.isEmpty()) {
             keyboardBuilder.add(new KeyboardButton()
                     .setAction(new KeyboardButtonAction()
                             .setLabel(ACTION_TO_PAYMENT)
