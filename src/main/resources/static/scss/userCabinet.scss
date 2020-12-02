@@ -1,10 +1,10 @@
 @import "variables";
 
-.container-fluid {
+.row align-items-center {
   padding: {
     top: 7px;
-    left: 25px;
-    right: 25px;
+    left: 40px;
+    right: 40px;
   }
   font-family: $default-font;
 }
@@ -22,10 +22,92 @@
   text-align: center;
   font-size: 25px;
   line-height: 1.5em;
+  border-bottom: 1px solid black;
 }
 
-@media (max-width: 470px) {
-  .cabinet-header {
-    font-size: 35px;
+
+.cabinet-container {
+  display: grid;
+  padding: {
+    top: 15px;
+    left: 20px;
+    right: 20px;
   }
 }
+
+.cabinet-order {
+  display: grid;
+  grid-template-areas:
+  "header header header header"
+  "order order order price";
+  grid-column-gap: 10px;
+}
+
+.cabinet-order-document {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  min-width: 0;
+}
+
+.cabinet-order-document-time {
+  grid-area: header;
+}
+
+.cabinet-order-document {
+  grid-area: order;
+}
+
+.cabinet-order-document-name {
+  display: inline-flex;
+
+  p {
+    font-size: 25px;
+    padding-left: 15px;
+  }
+}
+
+.cabinet-order-price {
+  grid-area: price;
+}
+
+.document-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cabinet-order-document {
+  p {
+    font-size: 23px;
+    margin: 0 auto;
+    white-space: nowrap;
+  }
+}
+
+.cabinet-order-document-info {
+  min-height: 50px;
+  align-items: end;
+  //TODO span to bottom
+}
+
+@media (max-width: 991.78px) {
+  .cabinet-header {
+    font-size: 38px;
+  }
+
+  .cabinet-article {
+    font-size: 20px;
+  }
+
+  .cabinet-order-document-name {
+    p {
+      font-size: 15px;
+    }
+  }
+
+}
+
+@media (max-width: 650px) {
+
+}
+
