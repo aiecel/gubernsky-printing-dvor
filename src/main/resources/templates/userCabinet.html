@@ -34,7 +34,8 @@
                 <a class="nav-link" href="#">Вести двора</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link hidden nav-right" href="userCabinet.html">Кабинет<span class="sr-only">(current)</span></a>
+                <a class="nav-link hidden nav-right" href="userCabinet.html">Кабинет<span
+                        class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link hidden nav-right" href="#">Выход</a>
@@ -53,44 +54,87 @@
     </div>
 </nav>
 <section>
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col">
-                <div class="cabinet-header">
-                    <p>Моя корреспонденция</p>
-                    <hr class="cabinet-divider">
-                </div>
-                <div class="cabinet-article">
-                    <p>По всей видимости, вы ещё не сделали ни одного заказа. Так чего же вы ждёте?</p>
-                </div>
-                <div class="cabinet-container accordion" id="accordionExample">
-                    <div class="card z-depth-0 bordered">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-1">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                                        aria-expanded="true" aria-controls="collapseOne">
-                                    Popugaicheekee.docx
-
-                                </button>
-                            </h5>
-                    <div class="cabinet-order collapse show card-body" id="collapseOne" aria-labelledby="headingOne"
-                    data-parent="#accordionExample">
-                        <span class="cabinet-order-document-time">02.12.2020 15:35:34</span>
-                        <div class="cabinet-order-document">
-                            <div class="cabinet-order-document-name">
-                                <p class="document-name">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet.docx</p>
-                                <p class="document-status">: На рассмотрении</p>
+    <div class="cabinet-header">
+        <p>Кабинетъ</p>
+        <hr class="cabinet-divider">
+    </div>
+    <div class="cabinet-container">
+        <div class="cabinet-make-order">
+            <div class="grid-template-header">
+                <p>Сделать заказ</p>
+            </div>
+            <p id="order-form-document-input-label">Выберите документ или перетащите его сюда...</p>
+        </div>
+        <div id="accordion">
+            <div class="grid-template-header">
+                <p>Моя Корреспонденция</p>
+            </div>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <p class="mb-0"></p>
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                            <div class="cabinet-order-header">
+                                <div class="order-info">05.12.2020 21:49 | Заказ №1</div>
+                                <div class="order-price">13p. Оплачено</div>
                             </div>
-                            <span class="cabinet-order-document-info">
-                                <img class="document-image" src="../static/img/machine.jpg" width="15" height="15">
-                                <span class="document-pages-info">5</span>
-                            </span>
-                        </div>
-                        <div class="cabinet-order-price">
-                            <span class="order-price">15р</span>
-                            <p class="order-price-description">на рассмотрении</p>
+                        </button>
+                    </div>
+                    <div id="collapseOne" class="collapsing" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="cabinet-order">
+                                <div class="cabinet-order-document-name">
+                                    <p class="document-name">File.docx</p>
+                                    <p class="document-status">: На рассмотрении</p>
+                                </div>
+                                <div class="cabinet-order-description">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab facere obcaecati qui
+                                        suscipit veritatis? Adipisci beatae ducimus libero maiores, molestias neque odit
+                                        placeat
+                                        quam quas recusandae rerum sint totam veritatis?Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Accusamus cumque delectus eius, iure omnis possimus ratione
+                                        sunt
+                                        temporibus ullam voluptates. Cum eos error ipsam voluptas. Error harum ipsum
+                                        iure
+                                        mollitia!</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <p class="mb-0"></p>
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo"
+                                aria-expanded="true" aria-controls="collapseTwo">
+                            <div class="cabinet-order-header">
+                                <div class="order-info">05.12.2020 21:50 | Заказ №2</div>
+                                <div class="order-price">45p. Оплачено</div>
+                            </div>
+                        </button>
+                    </div>
+                    <div id="collapseTwo" class="collapsing" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="cabinet-order">
+                                <div class="cabinet-order-document-name">
+                                    <p class="document-name">File.docx</p>
+                                    <p class="document-status">: На рассмотрении</p>
+                                </div>
+                                <div class="cabinet-order-description">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab facere obcaecati qui
+                                        suscipit veritatis? Adipisci beatae ducimus libero maiores, molestias neque odit
+                                        placeat
+                                        quam quas recusandae rerum sint totam veritatis?Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Accusamus cumque delectus eius, iure omnis possimus ratione
+                                        sunt
+                                        temporibus ullam voluptates. Cum eos error ipsam voluptas. Error harum ipsum
+                                        iure
+                                        mollitia!</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
