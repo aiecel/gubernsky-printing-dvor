@@ -2,7 +2,7 @@ package com.aiecel.gubernskyprintingdvor.bot.vk.handler;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
 import com.aiecel.gubernskyprintingdvor.bot.MessageHandler;
-import com.aiecel.gubernskyprintingdvor.bot.vk.MessageHandlerFactory;
+import com.aiecel.gubernskyprintingdvor.bot.MessageHandlerFactory;
 import com.vk.api.sdk.objects.messages.Keyboard;
 import com.vk.api.sdk.objects.messages.Message;
 import org.springframework.beans.factory.annotation.Autowired;

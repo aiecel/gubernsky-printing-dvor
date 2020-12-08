@@ -2,6 +2,7 @@ package com.aiecel.gubernskyprintingdvor.bot.vk;
 
 import com.aiecel.gubernskyprintingdvor.bot.Chatter;
 import com.aiecel.gubernskyprintingdvor.bot.MessageHandler;
+import com.aiecel.gubernskyprintingdvor.bot.MessageHandlerFactory;
 import com.aiecel.gubernskyprintingdvor.bot.vk.handler.HomeVkMessageHandler;
 import com.aiecel.gubernskyprintingdvor.service.VkUserService;
 import com.vk.api.sdk.objects.messages.Message;
