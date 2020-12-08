@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -32,7 +33,8 @@ public class VkBot {
         this.actor = actor;
         this.random = new Random();
     }
-
+    
+    @PostConstruct
     public void start() {
         try {
             //init timestamp

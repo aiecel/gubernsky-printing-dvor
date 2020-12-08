@@ -1,9 +1,9 @@
-package com.aiecel.gubernskyprintingdvor.service;
+package com.aiecel.gubernskyprintingdvor.service.implementation;
 
 import com.aiecel.gubernskyprintingdvor.model.Feedback;
 import com.aiecel.gubernskyprintingdvor.repository.FeedbackRepository;
+import com.aiecel.gubernskyprintingdvor.service.FeedbackService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -13,20 +13,22 @@ import java.time.ZonedDateTime;
 public class FeedbackServiceImpl implements FeedbackService {
     private final FeedbackRepository feedbackRepository;
 
-    @Autowired
     public FeedbackServiceImpl(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
 
     @Override
-    public void save(String feedbackText) {
+    public Feedback save(String feedbackText) {
         Feedback feedback = new Feedback();
         feedback.setText(feedbackText);
         feedback.setSendingDateTime(ZonedDateTime.now());
+        return save(feedback);
+    }
 
-        feedbackRepository.save(feedback);
-        log.info("New feedback - {}",
-                feedback.getText().length() <= 50 ? feedback.getText() : feedback.getText().substring(0, 50) + "..."
-        );
+    @Override
+    public Feedback save(Feedback feedback) {
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+        log.info("New feedback! - {}", feedback);
+        return savedFeedback;
     }
 }

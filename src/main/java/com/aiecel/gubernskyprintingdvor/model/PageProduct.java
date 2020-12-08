@@ -6,20 +6,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "page_product")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class User {
+public final class PageProduct {
+    public static final BigDecimal PAGE_PRODUCT_DEFAULT_PRICE = new BigDecimal(3);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    private BigDecimal price = PAGE_PRODUCT_DEFAULT_PRICE;
 }

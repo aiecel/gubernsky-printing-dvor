@@ -6,20 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "documents")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class User {
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    private String title;
+
+    private byte[] data;
+
+    private int pages;
 }

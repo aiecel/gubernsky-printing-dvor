@@ -6,20 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "ordered_products")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class User {
+public class OrderedProduct implements OrderedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private int quantity = 1;
 }
