@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Set<User> getAdministrators() {
+    public Set<User> getAdmins() {
         //fixme stub
         Set<User> admins = new HashSet<>();
         userRepository.findById(1L).ifPresent(admins::add);

@@ -7,4 +7,5 @@ import java.util.Collection;
 
 public interface NotificationService {
     void sendNotification(Notification notification, Collection<User> recipients);
+    void sendNotificationToAdmins(Notification notification);
 }

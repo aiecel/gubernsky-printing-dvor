@@ -6,6 +6,6 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 public interface UserService {
-    Set<User> getAdministrators();
+    Set<User> getAdmins();
     BigDecimal getDebt(long id);
 }

@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order save(Order order) {
         order.setPrice(pricingService.calculatePrice(order));
-        notificationService.sendNotification(new NewOrderNotification(order), userService.getAdministrators());
+        notificationService.sendNotification(new NewOrderNotification(order), userService.getAdmins());
         log.info("New order! - {}", order);
         return orderRepository.save(order);
     }
