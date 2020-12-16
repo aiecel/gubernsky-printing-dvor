@@ -70,8 +70,8 @@
 }
 
 .card-container {
-max-height: 700px;
-  overflow: scroll;
+  overflow-y: auto;
+  max-height:500px;
   //todo be or not to be...
 }
 
