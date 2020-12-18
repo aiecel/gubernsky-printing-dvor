@@ -1,0 +1,32 @@
+@import "variables";
+
+form {
+  width: 300px;
+  margin: 2em auto;
+  font-family: $default-font;
+}
+
+.signUp-header {
+  text-align: center;
+  padding-top: 20px;
+  font: {
+    size: 60px;
+    family: $header-font;
+  }
+}
+
+.confirm-password {
+  padding-top: 15px;
+}
+
+@media (max-width: 991.78px) {
+  .signUp-header {
+    font-size: 45px;
+  }
+}
+
+@media (max-width: 470px) {
+  .signUp-header {
+    font-size: 35px;
+  }
+}
