@@ -1,0 +1,37 @@
+package com.aiecel.gubernskytypography.service.implementation;
+
+import com.aiecel.gubernskytypography.model.Order;
+import com.aiecel.gubernskytypography.notification.NewOrderNotification;
+import com.aiecel.gubernskytypography.repository.OrderRepository;
+import com.aiecel.gubernskytypography.service.NotificationService;
+import com.aiecel.gubernskytypography.service.OrderService;
+import com.aiecel.gubernskytypography.service.PricingService;
+import com.aiecel.gubernskytypography.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@Slf4j
+@AllArgsConstructor
+public class OrderServiceImpl implements OrderService {
+    private final OrderRepository orderRepository;
+    private final PricingService pricingService;
+    private final UserService userService;
+    private final NotificationService notificationService;
+
+    @Override
+    public Order save(Order order) {
+        order.setPrice(pricingService.calculatePrice(order));
+        notificationService.sendNotification(new NewOrderNotification(order), userService.getAdmins());
+        log.info("New order! - {}", order);
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public List<Order> getAllByCustomerId(long customerId) {
+        return orderRepository.findAllByCustomer_Id(customerId);
+    }
+}
