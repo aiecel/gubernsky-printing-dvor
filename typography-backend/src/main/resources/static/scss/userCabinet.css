@@ -1,0 +1,82 @@
+.cabinet-header {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 60px;
+  font-family: Oranienbaum, serif; }
+
+.cabinet-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas: "make-order orders";
+  grid-row-gap: 30px;
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-right: 50px; }
+
+.cabinet-make-order {
+  grid-area: make-order;
+  padding-left: 5px;
+  padding-right: 5px; }
+
+.grid-template-header {
+  font-size: 33px;
+  text-align: center; }
+
+.cabinet-order-header {
+  display: flex;
+  justify-content: space-between; }
+
+.btn {
+  width: 100%; }
+
+.cabinet-order-document-name {
+  display: flex;
+  justify-content: center; }
+  .cabinet-order-document-name :last-child {
+    padding-left: 30px; }
+  .cabinet-order-document-name p {
+    font-size: 25px;
+    justify-content: center; }
+
+.cabinet-order-description {
+  color: #666565; }
+
+.cabinet-order-price {
+  grid-area: price; }
+
+.document-name {
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.card-container {
+  overflow-y: auto;
+  max-height: 500px; }
+
+@media (max-width: 991.78px) {
+  .cabinet-container {
+    grid-template-areas: "make-order" "orders";
+    grid-template-columns: 1fr;
+    padding-left: 0;
+    padding-right: 0; }
+  .cabinet-header {
+    font-size: 45px; }
+  .cabinet-article {
+    font-size: 20px; }
+  .cabinet-order-document-name p {
+    font-size: 22px; }
+  .grid-template-header {
+    font-size: 29px; } }
+
+@media (max-width: 470px) {
+  .cabinet-order-header {
+    font-size: 12px; }
+  .grid-template-header {
+    font-size: 20px; }
+  .cabinet-header {
+    font-size: 35px; }
+  .cabinet-order-document-name :last-child {
+    padding-left: 20px; }
+  .cabinet-order-document-name p {
+    font-size: 18px; } }
+
+/*# sourceMappingURL=../../../../../target/userCabinet.css.map */

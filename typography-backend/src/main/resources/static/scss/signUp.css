@@ -1,0 +1,23 @@
+form {
+  width: 300px;
+  margin: 2em auto;
+  font-family: Roboto Slab, serif; }
+
+.signUp-header {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 60px;
+  font-family: Oranienbaum, serif; }
+
+.confirm-password {
+  padding-top: 15px; }
+
+@media (max-width: 991.78px) {
+  .signUp-header {
+    font-size: 45px; } }
+
+@media (max-width: 470px) {
+  .signUp-header {
+    font-size: 35px; } }
+
+/*# sourceMappingURL=../../../../../target/signUp.css.map */
