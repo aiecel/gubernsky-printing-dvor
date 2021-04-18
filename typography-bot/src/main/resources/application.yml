@@ -1,0 +1,7 @@
+logging:
+  level:
+    com.vk.api.sdk.httpclient: error
+    root: info
+spring:
+  main:
+    web-application-type: none

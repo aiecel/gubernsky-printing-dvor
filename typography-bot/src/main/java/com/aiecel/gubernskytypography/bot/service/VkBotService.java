@@ -1,14 +1,21 @@
-package com.aiecel.gubernskytypography.bot.vk;
+package com.aiecel.gubernskytypography.bot.service;
 
+import com.aiecel.gubernskytypography.bot.api.AbstractMessageHandler;
+import com.aiecel.gubernskytypography.bot.api.Bot;
+import com.aiecel.gubernskytypography.bot.api.BotMessage;
+import com.aiecel.gubernskytypography.bot.api.UserMessage;
+import com.aiecel.gubernskytypography.bot.handler.HomeMessageHandler;
+import com.aiecel.gubernskytypography.bot.handler.TestMessageHandler;
+import com.aiecel.gubernskytypography.bot.vk.VkSDKAdapter;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -16,24 +23,25 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Component
+@Service
+@RequiredArgsConstructor
 @Slf4j
-public class VkBot {
+public class VkBotService extends Bot {
+    public static final int TICK_PERIOD_MS = 2000;
+
     private final VkApiClient vkApiClient;
-    private final VkChatter chatter;
     private final GroupActor actor;
-    private final Random random;
+    private final VkSDKAdapter vkSDKAdapter;
+    private final Random random = new Random();
 
     private int lastTickTimestamp;
 
-    @Autowired
-    public VkBot(VkApiClient vkApiClient, VkChatter chatter, GroupActor actor) {
-        this.vkApiClient = vkApiClient;
-        this.chatter = chatter;
-        this.actor = actor;
-        this.random = new Random();
+    @Override
+    public AbstractMessageHandler getDefaultMessageHandler() {
+        return new HomeMessageHandler();
     }
 
+    @PostConstruct
     public void start() {
         try {
             //init timestamp
@@ -45,7 +53,7 @@ public class VkBot {
                 public void run() {
                     onTick();
                 }
-            }, 0, 2000);
+            }, 0, TICK_PERIOD_MS);
 
             log.info("VK Bot started: GroupID {}, Access token: {}", actor.getGroupId(), actor.getAccessToken());
         } catch (ApiException | ClientException e) {
@@ -67,7 +75,7 @@ public class VkBot {
                 //check if the message was not from the bot
                 if (!userMessage.isOut()) {
                     try {
-                        sendMessage(userMessage.getFromId(), chatter.getAnswer(userMessage));
+                        processUserMessage(userMessage);
                     } catch (ClientException | ApiException e) {
                         log.error("Unable to handle message {}: {}", userMessage.getText(), e.getMessage());
                     }
@@ -81,18 +89,24 @@ public class VkBot {
         }
     }
 
-    private void sendMessage(int toUserId, Message message) throws ClientException, ApiException {
+    private void processUserMessage(Message message) throws ClientException, ApiException {
+        UserMessage userMessage = vkSDKAdapter.toUserMessage(message);
+        BotMessage botMessage = getResponse(userMessage);
+        sendMessage(botMessage);
+    }
+
+    private void sendMessage(BotMessage botMessage) throws ClientException, ApiException {
         MessagesSendQuery sendQuery = vkApiClient.messages().send(actor);
         sendQuery
-                .userId(toUserId)
+                .userId(Integer.valueOf(botMessage.getTo().getId()))
                 .randomId(random.nextInt(Integer.MAX_VALUE));
 
         //text
-        sendQuery.message(message.getText());
+        sendQuery.message(botMessage.getText());
 
         //keyboard
-        if (message.getKeyboard() != null) {
-            sendQuery.keyboard(message.getKeyboard());
+        if (botMessage.hasKeyboard()) {
+            sendQuery.keyboard(vkSDKAdapter.fromKeyboard(botMessage.getKeyboard()));
         }
 
         //execute query

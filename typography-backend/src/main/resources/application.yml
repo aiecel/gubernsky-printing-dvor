@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/typographyvk
-    username: postgres
-    password: postgres
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -15,8 +15,8 @@ spring:
         registration:
           vk:
             client-name: vk
-            client-id: 7616608
-            client-secret: 9PzKyaveI2YSblYIHZXG
+            client-id: ${VK_AUTH_CLIENT_ID}
+            client-secret: ${VK_AUTH_CLIENT_SECRET}
             provider: vk
             redirect-uri: http://localhost:8080/login/oauth2/code/vk
             authorization-grant-type: authorization_code
@@ -26,7 +26,7 @@ spring:
         provider:
           vk:
             authorization-uri: https://oauth.vk.com/authorize
-            token-uri: https://oauth.vk.com/access_token?client_secret=9PzKyaveI2YSblYIHZXG
+            token-uri: https://oauth.vk.com/access_token?client_secret=${VK_AUTH_CLIENT_SECRET}
             user-info-uri: https://api.vk.com/method/users.get?v=5.52&{user_id}
             user-name-attribute: user_id
 
@@ -34,3 +34,4 @@ logging:
   level:
     com.vk.api.sdk.httpclient: error
     root: info
+
