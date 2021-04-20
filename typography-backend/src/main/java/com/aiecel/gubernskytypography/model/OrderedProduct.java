@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrderedProduct implements OrderedItem {
+public class OrderedProduct extends OrderedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +27,9 @@ public class OrderedProduct implements OrderedItem {
     private Product product;
 
     private int quantity = 1;
+
+    @Override
+    public String getName() {
+        return product.getName();
+    }
 }

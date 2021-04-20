@@ -1,44 +1,63 @@
 package com.aiecel.gubernskytypography.security;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import com.vk.api.sdk.client.VkApiClient;
+import com.vk.api.sdk.client.actors.GroupActor;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.objects.users.UserXtrCounters;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-public class VkOAuth2UserLoader {
-    @SuppressWarnings("unchecked")
-    public static OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
-        RestTemplate template = new RestTemplate();
+@Component
+@RequiredArgsConstructor
+public class VkOAuth2UserLoader implements UserInfoLoader {
+    public static final String VK_CLIENT_REGISTRATION_ID = "vk";
 
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Content-Type", "application/json");
-        headers.add("Authorization", oAuth2UserRequest.getAccessToken().getTokenType().getValue() + " " + oAuth2UserRequest.getAccessToken().getTokenValue());
-        HttpEntity<?> httpRequest = new HttpEntity<>(headers);
-        String uri = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri();
-        String userNameAttributeName = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-        uri = uri.replace("{user_id}", userNameAttributeName + "=" + oAuth2UserRequest.getAdditionalParameters().get(userNameAttributeName));
+    private final VkApiClient vkApiClient;
+    private final GroupActor groupActor;
+
+    @Override
+    public String clientRegistrationId() {
+        return VK_CLIENT_REGISTRATION_ID;
+    }
+
+    public OAuth2User loadUserInfo(OAuth2UserRequest oAuth2UserRequest) {
+        String userNameAttributeName = oAuth2UserRequest
+                .getClientRegistration()
+                .getProviderDetails()
+                .getUserInfoEndpoint()
+                .getUserNameAttributeName();
+
+        String vkUserId = (String) oAuth2UserRequest.getAdditionalParameters().get(userNameAttributeName);
 
         try {
-            ResponseEntity<Object> entity = template.exchange(uri, HttpMethod.GET, httpRequest, Object.class);
-            Map<String, Object> response = (Map<String, Object>) entity.getBody();
-            ArrayList<LinkedHashMap<String, Object>> valueList = (ArrayList<LinkedHashMap<String, Object>>) response.get("response");
-            Map<String, Object> userAttributes = valueList.get(0);
+            UserXtrCounters userXtrCounters = vkApiClient
+                    .users()
+                    .get(groupActor)
+                    .userIds(vkUserId)
+                    .execute()
+                    .get(0);
+
+            String displayName = userXtrCounters.getFirstName() + " " + userXtrCounters.getLastName();
+
+            Map<String, Object> userAttributes = new HashMap<>();
+            userAttributes.put("username", vkUserId);
+            userAttributes.put("displayName", displayName);
+            userAttributes.put("registration", clientRegistrationId());
+
             Set<GrantedAuthority> authorities = Collections.singleton(new OAuth2UserAuthority(userAttributes));
-            return new DefaultOAuth2User(authorities, userAttributes, "first_name");
-        } catch (HttpClientErrorException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex.getMessage() + HttpStatus.UNAUTHORIZED);
+
+            return new CustomOAuth2User(userAttributes, authorities);
+        } catch (ApiException | ClientException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage() + HttpStatus.UNAUTHORIZED);
         }
     }
 }

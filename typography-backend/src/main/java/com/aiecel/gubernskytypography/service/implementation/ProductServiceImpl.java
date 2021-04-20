@@ -2,9 +2,9 @@ package com.aiecel.gubernskytypography.service.implementation;
 
 import com.aiecel.gubernskytypography.dto.ProductDTO;
 import com.aiecel.gubernskytypography.dto.mapper.ProductDTOMapper;
-import com.aiecel.gubernskytypography.model.PageProduct;
+import com.aiecel.gubernskytypography.model.Page;
 import com.aiecel.gubernskytypography.model.Product;
-import com.aiecel.gubernskytypography.repository.PageProductRepository;
+import com.aiecel.gubernskytypography.repository.PageRepository;
 import com.aiecel.gubernskytypography.repository.ProductRepository;
 import com.aiecel.gubernskytypography.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final PageProductRepository pageProductRepository;
+    private final PageRepository pageRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, PageProductRepository pageProductRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, PageRepository pageRepository) {
         this.productRepository = productRepository;
-        this.pageProductRepository = pageProductRepository;
+        this.pageRepository = pageRepository;
     }
 
     @Override
@@ -51,13 +51,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageProduct getPageProduct() {
-        return pageProductRepository.findById(0L).orElseGet(() -> pageProductRepository.save(new PageProduct()));
+    public Page getPageProduct() {
+        return pageRepository.findById(0L).orElseGet(() -> pageRepository.save(new Page()));
     }
 
     @Override
-    public PageProduct savePageProduct(PageProduct pageProduct) {
-        pageProduct.setId(0L);
-        return pageProductRepository.save(pageProduct);
+    public Page savePageProduct(Page page) {
+        page.setId(0L);
+        return pageRepository.save(page);
     }
 }

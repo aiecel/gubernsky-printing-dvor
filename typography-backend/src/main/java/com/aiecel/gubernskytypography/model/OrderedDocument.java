@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrderedDocument implements OrderedItem {
+public class OrderedDocument extends OrderedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +27,9 @@ public class OrderedDocument implements OrderedItem {
     private Document document;
 
     private int quantity = 1;
+
+    @Override
+    public String getName() {
+        return document.getTitle();
+    }
 }

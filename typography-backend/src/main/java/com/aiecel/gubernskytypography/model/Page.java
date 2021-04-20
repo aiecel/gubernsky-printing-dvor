@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public final class PageProduct {
+public final class Page {
     public static final BigDecimal PAGE_PRODUCT_DEFAULT_PRICE = new BigDecimal(3);
 
     @Id

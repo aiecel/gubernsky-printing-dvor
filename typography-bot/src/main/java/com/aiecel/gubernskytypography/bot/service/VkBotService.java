@@ -4,18 +4,23 @@ import com.aiecel.gubernskytypography.bot.api.AbstractMessageHandler;
 import com.aiecel.gubernskytypography.bot.api.Bot;
 import com.aiecel.gubernskytypography.bot.api.BotMessage;
 import com.aiecel.gubernskytypography.bot.api.UserMessage;
+import com.aiecel.gubernskytypography.bot.dto.OffSiteUserDTO;
+import com.aiecel.gubernskytypography.bot.dto.ProductDTO;
 import com.aiecel.gubernskytypography.bot.handler.HomeMessageHandler;
-import com.aiecel.gubernskytypography.bot.handler.TestMessageHandler;
 import com.aiecel.gubernskytypography.bot.vk.VkSDKAdapter;
+import com.aiecel.gubernskytypography.bot.vk.VkUser;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.messages.Message;
+import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.messages.MessagesSendQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -91,6 +96,11 @@ public class VkBotService extends Bot {
 
     private void processUserMessage(Message message) throws ClientException, ApiException {
         UserMessage userMessage = vkSDKAdapter.toUserMessage(message);
+
+        if (getChats().stream().noneMatch(chat -> chat.getUser().equals(userMessage.getUser()))) {
+            registerUser((VkUser) userMessage.getUser());
+        }
+
         BotMessage botMessage = getResponse(userMessage);
         sendMessage(botMessage);
     }
@@ -111,5 +121,37 @@ public class VkBotService extends Bot {
 
         //execute query
         sendQuery.execute();
+    }
+
+    private void registerUser(VkUser vkUser) {
+        try {
+            //get user data from VK API
+            UserXtrCounters userXtrCounters = vkApiClient
+                    .users()
+                    .get(actor)
+                    .userIds(vkUser.getId())
+                    .execute()
+                    .get(0);
+
+            //construct UserDTO
+            OffSiteUserDTO userDTO = new OffSiteUserDTO(
+                    vkUser.getId(),
+                    userXtrCounters.getFirstName() + " " + userXtrCounters.getLastName(),
+                    "vk"
+            );
+
+            //register user
+            WebClient webClient = WebClient.create("http://localhost:8085");
+            Mono<OffSiteUserDTO> userDTOMono = webClient
+                    .post()
+                    .uri("http://localhost:8080/offSiteUsers/register")
+                    .body(Mono.just(userDTO), OffSiteUserDTO.class)
+                    .retrieve()
+                    .bodyToMono(OffSiteUserDTO.class);
+
+            OffSiteUserDTO registeredUserDTO = userDTOMono.block();
+        } catch (ApiException | ClientException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -24,10 +24,7 @@ public class Order {
     private User customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<OrderedDocument> orderedDocuments = new HashSet<>();
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<OrderedProduct> orderedProducts = new HashSet<>();
+    private Set<OrderedItem> orderedItems = new HashSet<>();
 
     private String comment;
 
@@ -40,17 +37,24 @@ public class Order {
 
     private boolean isPaid;
 
-    public void addOrderedProduct(OrderedProduct orderedProduct) {
-        for (OrderedProduct product : orderedProducts) {
-            if (product.getProduct().getName().equals(orderedProduct.getProduct().getName())) {
-                product.setQuantity(product.getQuantity() + orderedProduct.getQuantity());
+    public void addItem(OrderedItem item) {
+        for (OrderedItem orderedItem : orderedItems) {
+            if (item instanceof OrderedDocument && orderedItem instanceof OrderedDocument) {
+                Document itemDocument = ((OrderedDocument) item).getDocument();
+                Document orderedDocument = ((OrderedDocument) orderedItem).getDocument();
+                if (itemDocument.equals(orderedDocument)) {
+                    orderedItem.setQuantity(orderedItem.getQuantity() + orderedItem.getQuantity());
+                    return;
+                }
+            } else if (orderedItem.getName().equals(orderedItem.getName())) {
+                orderedItem.setQuantity(orderedItem.getQuantity() + orderedItem.getQuantity());
                 return;
             }
         }
-        orderedProducts.add(orderedProduct);
+        orderedItems.add(item);
     }
 
     public boolean isEmpty() {
-        return orderedDocuments.size() == 0 && orderedProducts.size() == 0 && (comment == null || comment.length() == 0);
+        return orderedItems.size() == 0 && (comment == null || comment.length() == 0);
     }
 }
