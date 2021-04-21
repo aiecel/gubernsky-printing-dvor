@@ -9,12 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "site_users")
+@Table(name = "offsite_users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class SiteUser extends User {
-    private String username;
-    private String encryptedPassword;
+public class OffSiteUser extends User {
+    private String registration;
 }

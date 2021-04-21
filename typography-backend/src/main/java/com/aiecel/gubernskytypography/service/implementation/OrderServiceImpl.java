@@ -5,7 +5,6 @@ import com.aiecel.gubernskytypography.notification.NewOrderNotification;
 import com.aiecel.gubernskytypography.repository.OrderRepository;
 import com.aiecel.gubernskytypography.service.NotificationService;
 import com.aiecel.gubernskytypography.service.OrderService;
-import com.aiecel.gubernskytypography.service.PricingService;
 import com.aiecel.gubernskytypography.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final PricingService pricingService;
     private final UserService userService;
     private final NotificationService notificationService;
 
     @Override
     public Order save(Order order) {
-        order.setPrice(pricingService.calculatePrice(order));
         notificationService.sendNotification(new NewOrderNotification(order), userService.getAdmins());
         log.info("New order! - {}", order);
         return orderRepository.save(order);

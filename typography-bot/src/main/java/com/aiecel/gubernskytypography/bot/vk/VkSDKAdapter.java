@@ -14,7 +14,7 @@ import java.util.List;
 public class VkSDKAdapter implements UserMessageAdapter<Message>, KeyboardAdapter<Keyboard> {
     @Override
     public UserMessage toUserMessage(Message message) {
-        return new UserMessage(new VkUser(message.getFromId()), message.getText());
+        return new UserMessage(new VkUser(message.getFromId()), message.getText(), "vk");
     }
 
     @Override

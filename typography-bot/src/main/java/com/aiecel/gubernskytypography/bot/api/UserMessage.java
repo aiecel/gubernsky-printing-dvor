@@ -6,4 +6,5 @@ import lombok.Data;
 public class UserMessage {
     private final User user;
     private final String text;
+    private final String source; //todo lol change it
 }

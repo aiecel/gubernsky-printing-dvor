@@ -1,0 +1,7 @@
+package com.aiecel.gubernskytypography.repository;
+
+import com.aiecel.gubernskytypography.model.Page;
+import org.springframework.data.repository.CrudRepository;
+
+public interface PageRepository extends CrudRepository<Page, Long> {
+}

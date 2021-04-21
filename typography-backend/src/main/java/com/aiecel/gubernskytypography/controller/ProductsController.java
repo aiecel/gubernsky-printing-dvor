@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductsController {
     private final ProductService productService;
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all")
     public List<ProductDTO> getAllProducts() {
         return productService.getAllDTOs();
     }

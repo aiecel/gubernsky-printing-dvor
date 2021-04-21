@@ -1,12 +1,14 @@
 package com.aiecel.gubernskytypography.bot.api;
 
 import com.aiecel.gubernskytypography.bot.api.exception.ChatNotFoundException;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
+@Getter
 public abstract class Bot {
     private final Set<Chat> chats = new HashSet<>();
 
