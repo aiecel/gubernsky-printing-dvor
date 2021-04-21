@@ -15,12 +15,5 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class OffSiteUser extends User {
-    private String username;
-    private String displayName;
     private String registration;
-
-    @Override
-    public String toString() {
-        return username.equals(displayName) ? username : displayName + " (" + username + ")";
-    }
 }

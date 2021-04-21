@@ -20,6 +20,14 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String username;
+    private String displayName;
+
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
+
+    @Override
+    public String toString() {
+        return username.equals(displayName) ? username : displayName + " (" + username + ")";
+    }
 }

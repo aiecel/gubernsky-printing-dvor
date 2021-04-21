@@ -20,26 +20,32 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = loadUserInfo(userRequest).orElseGet(() -> {
-            OAuth2User user = super.loadUser(userRequest);
-            user.getAttributes().put("registration", userRequest.getClientRegistration().getRegistrationId());
-            return user;
+        CustomOAuth2User oAuth2User = loadUserInfo(userRequest).orElseGet(() -> {
+            org.springframework.security.oauth2.core.user.OAuth2User user = super.loadUser(userRequest);
+            String clientRegistrationId = userRequest.getClientRegistration().getRegistrationId();
+            user.getAttributes().put("clientRegistrationId", clientRegistrationId);
+            return new CustomOAuth2User(user.getName(), user.getName(), clientRegistrationId, user.getAuthorities());
         });
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(oAuth2User.getAttributes(), oAuth2User.getAuthorities());
 
         OffSiteUser offSiteUser = new OffSiteUser();
-        offSiteUser.setUsername(customOAuth2User.getUsername());
-        offSiteUser.setDisplayName(customOAuth2User.getDisplayName());
-        offSiteUser.setRegistration(customOAuth2User.getRegistration());
+        offSiteUser.setUsername(oAuth2User.getUsername());
+        offSiteUser.setDisplayName(oAuth2User.getDisplayName());
+        offSiteUser.setRegistration(oAuth2User.getClientRegistrationId());
 
         if (!offSiteUserService.exists(offSiteUser)) {
-            offSiteUserService.register(offSiteUser);
+            offSiteUser = offSiteUserService.register(offSiteUser);
         }
 
-        return customOAuth2User;
+        return new AuthenticatedUser(
+                offSiteUser.getId(),
+                offSiteUser.getUsername(),
+                null, //fixme ???
+                oAuth2User.getAttributes(),
+                oAuth2User.getAuthorities()
+        );
     }
 
-    private Optional<OAuth2User> loadUserInfo(OAuth2UserRequest userRequest) {
+    private Optional<CustomOAuth2User> loadUserInfo(OAuth2UserRequest userRequest) {
         String userRequestClientRegistrationId = userRequest.getClientRegistration().getRegistrationId();
 
         for (UserInfoLoader userInfoLoader : userInfoLoaders) {

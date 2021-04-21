@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,7 @@ public class VkOAuth2UserLoader implements UserInfoLoader {
         return VK_CLIENT_REGISTRATION_ID;
     }
 
-    public OAuth2User loadUserInfo(OAuth2UserRequest oAuth2UserRequest) {
+    public CustomOAuth2User loadUserInfo(OAuth2UserRequest oAuth2UserRequest) {
         String userNameAttributeName = oAuth2UserRequest
                 .getClientRegistration()
                 .getProviderDetails()
@@ -50,11 +49,11 @@ public class VkOAuth2UserLoader implements UserInfoLoader {
             Map<String, Object> userAttributes = new HashMap<>();
             userAttributes.put("username", vkUserId);
             userAttributes.put("displayName", displayName);
-            userAttributes.put("registration", clientRegistrationId());
+            userAttributes.put("clientRegistrationId", clientRegistrationId());
 
             Set<GrantedAuthority> authorities = Collections.singleton(new OAuth2UserAuthority(userAttributes));
 
-            return new CustomOAuth2User(userAttributes, authorities);
+            return new CustomOAuth2User(vkUserId, displayName, clientRegistrationId(), authorities);
         } catch (ApiException | ClientException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage() + HttpStatus.UNAUTHORIZED);
