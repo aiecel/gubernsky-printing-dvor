@@ -53,8 +53,4 @@ public class Order {
         }
         orderedItems.add(item);
     }
-
-    public boolean isEmpty() {
-        return orderedItems.size() == 0 && (comment == null || comment.length() == 0);
-    }
 }
