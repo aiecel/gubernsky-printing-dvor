@@ -5,7 +5,6 @@ import com.aiecel.gubernskytypography.bot.api.Bot;
 import com.aiecel.gubernskytypography.bot.api.BotMessage;
 import com.aiecel.gubernskytypography.bot.api.UserMessage;
 import com.aiecel.gubernskytypography.bot.dto.OffSiteUserDTO;
-import com.aiecel.gubernskytypography.bot.dto.ProductDTO;
 import com.aiecel.gubernskytypography.bot.handler.HomeMessageHandler;
 import com.aiecel.gubernskytypography.bot.vk.VkSDKAdapter;
 import com.aiecel.gubernskytypography.bot.vk.VkUser;
@@ -41,9 +40,11 @@ public class VkBotService extends Bot {
 
     private int lastTickTimestamp;
 
+    private final HomeMessageHandler homeMessageHandler;
+
     @Override
     public AbstractMessageHandler getDefaultMessageHandler() {
-        return new HomeMessageHandler();
+        return homeMessageHandler;
     }
 
     @PostConstruct
@@ -102,13 +103,13 @@ public class VkBotService extends Bot {
         }
 
         BotMessage botMessage = getResponse(userMessage);
-        sendMessage(botMessage);
+        sendMessage(message.getFromId(), botMessage);
     }
 
-    private void sendMessage(BotMessage botMessage) throws ClientException, ApiException {
+    private void sendMessage(int userId, BotMessage botMessage) throws ClientException, ApiException {
         MessagesSendQuery sendQuery = vkApiClient.messages().send(actor);
         sendQuery
-                .userId(Integer.valueOf(botMessage.getTo().getId()))
+                .userId(userId)
                 .randomId(random.nextInt(Integer.MAX_VALUE));
 
         //text

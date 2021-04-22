@@ -1,4 +1,4 @@
-package com.aiecel.gubernskytypography.bot.old;
+package com.aiecel.gubernskytypography.bot.handler.old;
 
 //import com.aiecel.gubernskytypography.bot.Chatter;
 //import com.aiecel.gubernskytypography.bot.vk.keyboard.KeyboardBuilder;
@@ -8,13 +8,9 @@ package com.aiecel.gubernskytypography.bot.old;
 //import com.aiecel.gubernskytypography.model.OffSiteUser;
 //import com.aiecel.gubernskytypography.service.OrderService;
 //import com.aiecel.gubernskytypography.service.OffSiteUserService;
-import com.vk.api.sdk.objects.messages.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 @Scope("prototype")

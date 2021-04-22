@@ -1,8 +1,7 @@
-package com.aiecel.gubernskytypography.bot.old;
+package com.aiecel.gubernskytypography.bot.handler.old;
 
 //import com.aiecel.gubernskytypography.bot.Chatter;
 //import com.aiecel.gubernskytypography.bot.vk.keyboard.KeyboardBuilder;
-import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

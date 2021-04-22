@@ -1,4 +1,4 @@
-package com.aiecel.gubernskytypography.bot.old;
+package com.aiecel.gubernskytypography.bot.handler.old;
 
 //import com.aiecel.gubernskytypography.bot.Chatter;
 //import com.aiecel.gubernskytypography.bot.vk.keyboard.KeyboardBuilder;
@@ -6,13 +6,9 @@ package com.aiecel.gubernskytypography.bot.old;
 //import com.aiecel.gubernskytypography.service.OrderService;
 //import com.aiecel.gubernskytypography.service.PricingService;
 //import com.aiecel.gubernskytypography.service.UserService;
-import com.vk.api.sdk.objects.messages.*;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 
 @Component
 @Scope("prototype")

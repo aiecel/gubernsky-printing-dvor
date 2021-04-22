@@ -1,11 +1,9 @@
-package com.aiecel.gubernskytypography.bot.old;
+package com.aiecel.gubernskytypography.bot.handler.old;
 
 //import com.aiecel.gubernskytypography.bot.Chatter;
 //import com.aiecel.gubernskytypography.bot.MessageHandler;
 //import com.aiecel.gubernskytypography.bot.MessageHandlerFactory;
 //import com.vk.api.sdk.objects.messages.Keyboard;
-import com.vk.api.sdk.objects.messages.Message;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class VkMessageHandler {
 //    private MessageHandlerFactory<Message> messageHandlerFactory;
