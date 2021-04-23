@@ -1,6 +1,7 @@
 package com.aiecel.gubernskytypography.service.implementation;
 
 import com.aiecel.gubernskytypography.model.Order;
+import com.aiecel.gubernskytypography.model.Role;
 import com.aiecel.gubernskytypography.notification.NewOrderNotification;
 import com.aiecel.gubernskytypography.repository.OrderRepository;
 import com.aiecel.gubernskytypography.service.NotificationService;
@@ -22,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order save(Order order) {
-        notificationService.sendNotification(new NewOrderNotification(order), userService.getAdmins());
+        notificationService.sendNotification(new NewOrderNotification(order), userService.getUsersWithRole(Role.ADMIN));
         log.info("New order! - {}", order);
         return orderRepository.save(order);
     }

@@ -1,6 +1,7 @@
 package com.aiecel.gubernskytypography.service.implementation;
 
 import com.aiecel.gubernskytypography.model.Order;
+import com.aiecel.gubernskytypography.model.Role;
 import com.aiecel.gubernskytypography.model.User;
 import com.aiecel.gubernskytypography.repository.UserRepository;
 import com.aiecel.gubernskytypography.service.UserService;
@@ -21,12 +22,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Set<User> getAdmins() {
+    @Transactional
+    public Set<User> getUsersWithRole(Role role) {
         //fixme stub
-        Set<User> admins = new HashSet<>();
-        userRepository.findById(1L).ifPresent(admins::add);
-        userRepository.findById(2L).ifPresent(admins::add);
-        return admins;
+        if (role == Role.ADMIN) {
+            Set<User> admins = new HashSet<>();
+            userRepository.findById(1L).ifPresent(admins::add);
+            userRepository.findById(2L).ifPresent(admins::add);
+            return admins;
+        }
+        return new HashSet<>();
     }
 
     @Override

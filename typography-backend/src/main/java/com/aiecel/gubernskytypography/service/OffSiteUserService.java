@@ -1,7 +1,7 @@
 package com.aiecel.gubernskytypography.service;
 
 import com.aiecel.gubernskytypography.dto.OffSiteUserDTO;
-import com.aiecel.gubernskytypography.dto.mapper.OffSiteDTOMapper;
+import com.aiecel.gubernskytypography.dto.mapping.OffSiteDTOMapper;
 import com.aiecel.gubernskytypography.model.OffSiteUser;
 import org.mapstruct.factory.Mappers;
 

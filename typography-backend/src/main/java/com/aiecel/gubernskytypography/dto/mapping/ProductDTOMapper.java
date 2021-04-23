@@ -1,4 +1,4 @@
-package com.aiecel.gubernskytypography.dto.mapper;
+package com.aiecel.gubernskytypography.dto.mapping;
 
 import com.aiecel.gubernskytypography.dto.ProductDTO;
 import com.aiecel.gubernskytypography.model.Product;

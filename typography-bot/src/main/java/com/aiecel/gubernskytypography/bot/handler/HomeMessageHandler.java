@@ -38,6 +38,9 @@ public class HomeMessageHandler extends AbstractMessageHandler {
     @Setter(onMethod_ = @Autowired) //to avoid circular dependency
     private CartMessageHandler cartMessageHandler;
 
+    @Setter(onMethod_ = @Autowired) //to avoid circular dependency
+    private FeedbackMessageHandler feedbackMessageHandler;
+
     public HomeMessageHandler() {
         this.keyboard = new KeyboardBuilder()
                 .add(new Button(ACTION_ORDER, ButtonType.PRIMARY))
@@ -77,7 +80,7 @@ public class HomeMessageHandler extends AbstractMessageHandler {
     }
 
     private BotMessage onActionFeedback(Chat chat) {
-        //todo change to feedback message handler
-        return getDefaultResponse(chat);
+        chat.setMessageHandler(feedbackMessageHandler);
+        return feedbackMessageHandler.getDefaultResponse(chat);
     }
 }

@@ -27,4 +27,9 @@ public final class NewOrderNotification implements Notification {
 
         return String.format(MESSAGE, customer, order.getPrice() + " руб.");
     }
+
+    @Override
+    public String toString() {
+        return "New Order Notification";
+    }
 }

@@ -1,7 +1,7 @@
 package com.aiecel.gubernskytypography.service.implementation;
 
 import com.aiecel.gubernskytypography.dto.ProductDTO;
-import com.aiecel.gubernskytypography.dto.mapper.ProductDTOMapper;
+import com.aiecel.gubernskytypography.dto.mapping.ProductDTOMapper;
 import com.aiecel.gubernskytypography.model.Page;
 import com.aiecel.gubernskytypography.model.Product;
 import com.aiecel.gubernskytypography.repository.PageRepository;

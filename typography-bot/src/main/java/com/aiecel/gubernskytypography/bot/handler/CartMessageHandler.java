@@ -56,7 +56,7 @@ public class CartMessageHandler extends AbstractMessageHandler {
     public BotMessage getDefaultResponse(Chat chat) {
         Optional<Cart> cartOptional = cartService.getByCustomerId(chat.getUser().getId());
         return cartOptional.map(cart -> new BotMessage(buildCartDescription(cart), buildKeyboard()))
-                .orElseGet(() -> new BotMessage(DEFAULT_MESSAGE));
+                .orElseGet(() -> new BotMessage(DEFAULT_MESSAGE, buildKeyboard()));
     }
 
     @Override
