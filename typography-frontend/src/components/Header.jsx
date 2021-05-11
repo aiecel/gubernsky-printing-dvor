@@ -1,57 +1,26 @@
 import React from 'react'
-
-import {Link, NavLink} from "react-router-dom";
+import * as RBS from "react-bootstrap";
+import {LinkContainer} from "react-router-bootstrap";
 
 const Header = () => {
 
-
-    const links = [
-        {linkTo: '/feedback', name: 'Жалобная книга', className: 'nav-link'},
-        {linkTo: '/news', name: 'Новости', className: 'nav-link'},
-        {linkTo: '/userCabinet', name: 'Кабинет', className: 'nav-link hidden nav-right'},
-        {linkTo: '/signUp', name: 'Регистрация', className: 'nav-link hidden nav-right'}
-    ]
-
-    const [activeItem, setActiveItem] = React.useState(null);
-
-    const onSelectedItem = (index) => {
-        setActiveItem(index)
-    }
-
     return (
-        <nav className="navbar navbar-expand-xl navbar-light">
-            <Link  to={'/'}><a className='navbar-brand'>Губернский печатный двор</a></Link>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"/>
-            </button>
-            <div className="navbar-collapse collapse " id="navbarNav">
-                <ul className='navbar-nav'>
-                    {links && links.map(({name, linkTo, className}, index) => (
-                        <li className='nav-item'>
-                            <NavLink to={linkTo} activeClassName='active'>
-                                <a key={`${name}_${index}`} onClick={() => onSelectedItem(index)}
-                                   className={activeItem === index && className !== 'nav-link hidden nav-right' ? 'nav-link' : className}>
-                                    {name}</a>
-                            </NavLink>
-                        </li>)
-                    )}
-                </ul>
-            </div>
-            <div className='navbar-collapse collapse  justify-content-end'>
-                <ul className='nav navbar-nav'>
-                    {links && links.map(({name, linkTo, className}, index) => (
-                        className === 'nav-link hidden nav-right' ?
-                            <li className='nav-item'>
-                                <NavLink to={linkTo} activeClassName='active'>
-                                    <a key={`${name}_${index}`} onClick={() => onSelectedItem(index)}
-                                       className={activeItem === index ? 'nav-link nav-right' : 'nav-link nav-right'}>{name}</a>
-                                </NavLink>
-                            </li> : '')
-                    )}
-                </ul>
-            </div>
-        </nav>
+        <>
+            <RBS.Navbar className="navbar navbar-expand-xl navbar-light" collapseOnSelect={true} bg="white" expand="lg">
+                <LinkContainer to='/'><RBS.Navbar.Brand>Губернский Печатный Двор</RBS.Navbar.Brand></LinkContainer>
+                <RBS.Navbar.Toggle aria-controls="basicRBS.-navbar-nav"/>
+                <RBS.Navbar.Collapse id="basic-navbar-nav">
+                    <RBS.Nav activeKey='/' className='mr-auto'>
+                        <LinkContainer to='/feedback'><RBS.Nav.Link>Жалобная книга</RBS.Nav.Link></LinkContainer>
+                        <LinkContainer to='/news'><RBS.Nav.Link>Новости</RBS.Nav.Link></LinkContainer>
+                    </RBS.Nav>
+                    <RBS.Nav activeKey='/'>
+                        <LinkContainer to='/cabinet'><RBS.NavLink>Кабинет</RBS.NavLink></LinkContainer>
+                        <LinkContainer to='/signUp'><RBS.NavLink>Выход</RBS.NavLink></LinkContainer>
+                    </RBS.Nav>
+                </RBS.Navbar.Collapse>
+            </RBS.Navbar>
+        </>
     )
 }
 

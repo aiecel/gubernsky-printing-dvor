@@ -1,12 +1,11 @@
 import React from 'react'
 
 import axios from "axios";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 
 const FeedbackContainer = () => {
     let history = useHistory();
-
     return (
         <section>
             <div className="feedback-container">
@@ -25,7 +24,7 @@ const FeedbackContainer = () => {
                             }
                             return errors;
                         }}
-                        onSubmit={(values) => {
+                        onSubmit={(values, actions) => {
                             axios.post('http://localhost:3001/pizzas', {
                                 data: values,
                                 time: new Date().toLocaleString()
@@ -34,7 +33,11 @@ const FeedbackContainer = () => {
                                     console.log(response)
                                 }, (err) => {
                                     console.log(err)
-                                }, history.push('feedbackSuccess'))
+                                });
+                            actions.resetForm();
+                            setTimeout(() => {
+                                history.push('feedbackSuccess')
+                            }, 1000)
                         }}
                     >
                         {() => (
