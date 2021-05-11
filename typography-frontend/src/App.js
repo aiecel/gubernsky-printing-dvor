@@ -12,8 +12,8 @@ function App() {
 
     return (
         <BrowserRouter>
+            <Header/>
             <Switch>
-                <Header/>
                 <Route path='/' exact component={MainPage}/>
                 <Route path='/feedback' exact component={FeedbackPage}/>
                 <Route path='/feedbackSuccess' exact component={FeedbackSuccess}/>
