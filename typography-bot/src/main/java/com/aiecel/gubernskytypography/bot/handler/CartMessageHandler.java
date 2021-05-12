@@ -9,15 +9,17 @@ import com.aiecel.gubernskytypography.bot.api.keyboard.ButtonType;
 import com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard;
 import com.aiecel.gubernskytypography.bot.api.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskytypography.bot.model.Cart;
+import com.aiecel.gubernskytypography.bot.model.OffSiteUser;
 import com.aiecel.gubernskytypography.bot.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class CartMessageHandler extends AbstractMessageHandler {
     public static final String DEFAULT_MESSAGE =
@@ -44,7 +46,8 @@ public class CartMessageHandler extends AbstractMessageHandler {
             "Мы видимъ документъ, да не узнаем почерк... \nТакой формат мы пока не воспринимаемъ";
 
     public static final String ACTION_TO_PAYMENT = "\uD83D\uDCB4 Оплатить!";
-    public static final String ACTION_COMMENT = "✏ Прикрепить комментарий";
+    public static final String ACTION_ATTACH_COMMENT = "✏ Прикрепить комментарий";
+    public static final String ACTION_REMOVE_COMMENT = "✏ Убрать комментарий";
     public static final String ACTION_CANCEL = "\uD83D\uDEAB Отменить заказъ";
 
     @Setter(onMethod_ = @Autowired) //to avoid circular dependency
@@ -54,35 +57,80 @@ public class CartMessageHandler extends AbstractMessageHandler {
 
     @Override
     public BotMessage getDefaultResponse(Chat chat) {
-        Optional<Cart> cartOptional = cartService.getByCustomerId(chat.getUser().getId());
-        return cartOptional.map(cart -> new BotMessage(buildCartDescription(cart), buildKeyboard()))
-                .orElseGet(() -> new BotMessage(DEFAULT_MESSAGE, buildKeyboard()));
+        Cart cart = getCart(chat);
+        return new BotMessage(buildCartDescription(cart) + "\n\n" + MESSAGE_WHAT_ELSE, buildKeyboard(cart));
     }
 
     @Override
     public BotMessage onMessage(UserMessage message, Chat chat) {
+        Cart cart = getCart(chat);
+        //attach comment
+        if (message.getText().equals(ACTION_ATTACH_COMMENT) && cart.getComment().length() == 0) {
+            return onActionAttachComment(chat);
+        }
+
+        //remove comment
+        if (message.getText().equals(ACTION_REMOVE_COMMENT) && cart.getComment().length() > 0) {
+            return onActionRemoveComment(chat);
+        }
+
+        //cancel order
         if (message.getText().equals(ACTION_CANCEL)) {
             return onActionCancel(chat);
         }
+
+        return getDefaultResponse(chat);
+    }
+
+    @Lookup
+    public CommentMessageHandler getCommentMessageHandler() {
+        return null;
+    }
+
+    private BotMessage onActionAttachComment(Chat chat) {
+        //to comment message handler
+        log.info("Redirecting user {} to CommentMessageHandler", chat.getUser());
+        CommentMessageHandler commentMessageHandler = getCommentMessageHandler();
+        commentMessageHandler.setCart(getCart(chat));
+        chat.setMessageHandler(commentMessageHandler);
+        return commentMessageHandler.getDefaultResponse(chat);
+    }
+
+    private BotMessage onActionRemoveComment(Chat chat) {
+        //remove comment
+        cartService.get((OffSiteUser) chat.getUser()).ifPresent(cart -> {
+            cart.removeComment();
+            cartService.save(cart);
+        });
+        log.info("User {} removed cart comment", chat.getUser());
         return getDefaultResponse(chat);
     }
 
     private BotMessage onActionCancel(Chat chat) {
-        //delete cart if it exists
-        if (cartService.exists(chat.getUser().getId())) {
-            cartService.delete(chat.getUser().getId());
-        }
+        //delete cart
+        cartService.delete((OffSiteUser) chat.getUser());
 
         //to home message handler
+        log.info("Redirecting user {} to HomeMessageHandler", chat.getUser());
         chat.setMessageHandler(homeMessageHandler);
         return new BotMessage(MESSAGE_ON_CANCEL, homeMessageHandler.getKeyboard());
     }
 
-    private String buildCartDescription(Cart cart) {
-        return "";
+    private Cart getCart(Chat chat) {
+        OffSiteUser user = (OffSiteUser) chat.getUser();
+        return cartService.get(user).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setCustomer(user);
+            return cartService.save(newCart);
+        });
     }
 
-    private Keyboard buildKeyboard() {
+    private String buildCartDescription(Cart cart) {
+        if (cart.getComment().length() > 0) return cart.getComment();
+        return "Корзина пуста";
+    }
+
+    private Keyboard buildKeyboard(Cart cart) {
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
 //        Set<Product> products = productService.getAll();
 //
@@ -98,13 +146,12 @@ public class CartMessageHandler extends AbstractMessageHandler {
 //
 //        //todo add "more products" button
 //
-//        //comment button
-//        keyboardBuilder.add(new KeyboardButton()
-//                .setAction(new KeyboardButtonAction()
-//                        .setLabel(ACTION_COMMENT)
-//                        .setType(KeyboardButtonActionType.TEXT))
-//                .setColor(KeyboardButtonColor.DEFAULT)
-//        );
+        //comment button
+        if (cart.getComment().length() == 0) {
+            keyboardBuilder.add(new Button(ACTION_ATTACH_COMMENT));
+        } else {
+            keyboardBuilder.add(new Button(ACTION_REMOVE_COMMENT));
+        }
 //
 //        //payment button
 //        if (!order.isEmpty()) {

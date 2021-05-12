@@ -10,11 +10,13 @@ import com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard;
 import com.aiecel.gubernskytypography.bot.api.keyboard.KeyboardBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
 @Component
-@Getter
+@Slf4j
 public class HomeMessageHandler extends AbstractMessageHandler {
     public static final String DEFAULT_MESSAGE =
             "Губернский Печатный Дворъ привѣтствуетъ тебя, засельщина земли Губернской! \n" +
@@ -33,13 +35,11 @@ public class HomeMessageHandler extends AbstractMessageHandler {
     public static final String ACTION_CHECK_ORDERS = "\uD83D\uDCBC Моя корреспонденция";
     public static final String ACTION_FEEDBACK = "\uD83D\uDCD6 Книга жалобъ";
 
+    @Getter
     private final Keyboard keyboard;
 
     @Setter(onMethod_ = @Autowired) //to avoid circular dependency
     private CartMessageHandler cartMessageHandler;
-
-    @Setter(onMethod_ = @Autowired) //to avoid circular dependency
-    private FeedbackMessageHandler feedbackMessageHandler;
 
     public HomeMessageHandler() {
         this.keyboard = new KeyboardBuilder()
@@ -69,7 +69,13 @@ public class HomeMessageHandler extends AbstractMessageHandler {
         return getDefaultResponse(chat);
     }
 
+    @Lookup
+    public FeedbackMessageHandler getFeedbackMessageHandler() {
+        return null;
+    }
+
     private BotMessage onActionOrder(Chat chat) {
+        log.info("Redirecting user {} to CartMessageHandler", chat.getUser());
         chat.setMessageHandler(cartMessageHandler);
         return cartMessageHandler.getDefaultResponse(chat);
     }
@@ -80,6 +86,8 @@ public class HomeMessageHandler extends AbstractMessageHandler {
     }
 
     private BotMessage onActionFeedback(Chat chat) {
+        log.info("Redirecting user {} to FeedbackMessageHandler", chat.getUser());
+        FeedbackMessageHandler feedbackMessageHandler = getFeedbackMessageHandler();
         chat.setMessageHandler(feedbackMessageHandler);
         return feedbackMessageHandler.getDefaultResponse(chat);
     }

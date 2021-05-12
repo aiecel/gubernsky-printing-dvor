@@ -7,13 +7,15 @@ import com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard;
 import com.aiecel.gubernskytypography.bot.api.keyboard.KeyboardBuilder;
 import com.aiecel.gubernskytypography.bot.service.FeedbackService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+@Slf4j
 public class FeedbackMessageHandler extends AbstractMessageHandler {
     public static final String DEFAULT_MESSAGE =
             "Имеити благосовѣтіе для Двора Печатнаго?\n" +
@@ -35,7 +37,7 @@ public class FeedbackMessageHandler extends AbstractMessageHandler {
     public static final String ACTION_SEND = "\uD83D\uDC49\uD83C\uDFFB Послати!";
 
     private final FeedbackService feedbackService;
-    private final Map<User, StringBuilder> feedbackBuilders;
+    private final StringBuilder feedbackBuilder;
 
     private final Keyboard noFeedbackKeyboard;
     private final Keyboard hasFeedbackKeyboard;
@@ -45,7 +47,7 @@ public class FeedbackMessageHandler extends AbstractMessageHandler {
 
     public FeedbackMessageHandler(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
-        this.feedbackBuilders = new HashMap<>();
+        this.feedbackBuilder = new StringBuilder();
 
         this.noFeedbackKeyboard = new KeyboardBuilder()
                 .add(new Button(ACTION_CANCEL, ButtonType.NEGATIVE))
@@ -63,21 +65,16 @@ public class FeedbackMessageHandler extends AbstractMessageHandler {
     }
 
     @Override
+    @SuppressWarnings("DuplicatedCode")
     public BotMessage onMessage(UserMessage message, Chat chat) {
         //cancel feedback
         if (message.getText().equals(ACTION_CANCEL)) {
             return onActionCancel(chat);
         }
 
-        //get feedback builder
-        StringBuilder feedbackBuilder = new StringBuilder();
-        if (feedbackBuilders.containsKey(message.getUser())) {
-            feedbackBuilder = feedbackBuilders.get(message.getUser());
-        }
-
         //send feedback
         if (message.getText().equals(ACTION_SEND) && feedbackBuilder.length() > 0) {
-            return onActionSend(chat, feedbackBuilder.toString());
+            return onActionSend(feedbackBuilder.toString(), chat);
         }
 
         //append text
@@ -85,7 +82,6 @@ public class FeedbackMessageHandler extends AbstractMessageHandler {
             feedbackBuilder.append("; ");
         }
         feedbackBuilder.append(message.getText());
-        feedbackBuilders.put(message.getUser(), feedbackBuilder);
 
         return new BotMessage(
                 "\"" + feedbackBuilder.toString() + "\"\n\n" + MESSAGE_CONFIRM_SENDING,
@@ -94,13 +90,15 @@ public class FeedbackMessageHandler extends AbstractMessageHandler {
     }
 
     private BotMessage onActionCancel(Chat chat) {
-        feedbackBuilders.remove(chat.getUser());
+        log.info("Redirecting user {} to HomeMessageHandler", chat.getUser());
         chat.setMessageHandler(homeMessageHandler);
         return new BotMessage(MESSAGE_CANCEL, homeMessageHandler.getKeyboard());
     }
 
-    private BotMessage onActionSend(Chat chat, String feedback) {
+    private BotMessage onActionSend(String feedback, Chat chat) {
         feedbackService.send(feedback);
+
+        log.info("Redirecting user {} to HomeMessageHandler", chat.getUser());
         chat.setMessageHandler(homeMessageHandler);
         return new BotMessage(MESSAGE_FEEDBACK_SENT, homeMessageHandler.getKeyboard());
     }
