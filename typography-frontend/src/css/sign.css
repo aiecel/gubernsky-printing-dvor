@@ -25,6 +25,10 @@
 .btn {
     margin-top: 1em;
 }
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
 
 @media (max-width: 470px) {
     .feedback-header {
@@ -34,6 +38,10 @@
 
     .feedback-article {
         font-size: 20px;
+    }
+
+    .form-group {
+        width: calc(100vw - 32px);
     }
 }
 @media (max-width: 350px) {

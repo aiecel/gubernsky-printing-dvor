@@ -1,3 +1,12 @@
+html, body {
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
 .section-title-header {
     margin: 6vmin auto 2vmin auto;
     text-align: center;
@@ -53,5 +62,15 @@
     .section-title-header {
         font-size: 27px;
 
+    }
+}
+
+@media (max-width: 600px),
+(orientation: landscape) and (max-width: 900px) {
+    html, body {
+        height: -webkit-fill-available;
+    }
+    body {
+        min-height: -webkit-fill-available;
     }
 }

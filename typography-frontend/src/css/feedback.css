@@ -26,6 +26,10 @@
     margin-top: 1em;
 }
 
+.feedback-form__textarea {
+    width: 10%;
+}
+
 @media (max-width: 470px) {
     .feedback-header {
         padding-top: 12px;

@@ -61,15 +61,11 @@ button:focus {
 }
 @media screen and (max-width: 470px) {
     .navbar-brand {
-        font-size: 25px;
+        font-size: 20px;
         margin-right: 0;
     }
 }
-@media screen and (max-width: 400px) {
-    .navbar-brand {
-        font-size: 17px;
-    }
-}
+
 .form-group {
     width: auto;
 }

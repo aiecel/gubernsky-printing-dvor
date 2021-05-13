@@ -47,7 +47,7 @@ const FeedbackContainer = () => {
                                     <Field as='textarea' size='50' type="text" maxLength="5000" aria-label='Large'
                                            cols='40'
                                            className="form-control" name="text"
-                                           placeholder="Пишите..." autoFocus={true}/>
+                                           placeholder="Пишите..." />
                                 </div>
                                 <button className="btn btn-light" type="submit">
                                     Отослать!
