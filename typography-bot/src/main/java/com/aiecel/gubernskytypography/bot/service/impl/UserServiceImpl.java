@@ -45,7 +45,8 @@ public class UserServiceImpl implements UserService {
                 .retrieve()
                 .bodyToMono(OffSiteUserDTO.class);
 
-        userDTOMono.block();
+        userDTOMono.block(); //todo handle exceptions
+
         log.info("User registered: {}", user);
         return userRepository.save(user);
     }

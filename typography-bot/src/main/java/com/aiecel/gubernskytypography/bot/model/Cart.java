@@ -29,7 +29,31 @@ public class Cart {
 
     private String comment = "";
 
+    public void addItem(CartItem cartItem) {
+        items.add(cartItem);
+    }
+
     public void removeComment() {
         comment = "";
+    }
+
+    public String toPrettyString() {
+        StringBuilder builder = new StringBuilder();
+        if (items.size() > 0) {
+            items.forEach(item -> {
+                builder.append("• ").append(item).append("\n");
+            });
+        } else {
+            builder.append("Корзина пуста");
+        }
+
+        //remove \n in the end
+        builder.deleteCharAt(builder.length() - 1);
+
+        if (comment.length() > 0) {
+            builder.append("\n\n").append("Комментарий к заказу: '").append(comment).append("'");
+        }
+
+        return builder.toString();
     }
 }

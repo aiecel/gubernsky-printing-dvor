@@ -8,12 +8,15 @@ import java.time.ZonedDateTime;
 
 @Value
 public class FeedbackDTO {
+    long id;
     String text;
     ZonedDateTime sendingDateTime;
 
     @JsonCreator
-    public FeedbackDTO(@JsonProperty("text") String text,
+    public FeedbackDTO(@JsonProperty("id") long id,
+                       @JsonProperty("text") String text,
                        @JsonProperty("sendingDateTime") ZonedDateTime sendingDateTime) {
+        this.id = id;
         this.text = text;
         this.sendingDateTime = sendingDateTime;
     }

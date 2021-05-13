@@ -5,5 +5,5 @@ import com.aiecel.gubernskytypography.model.OffSiteUser;
 import org.mapstruct.Mapper;
 
 @Mapper
-public interface OffSiteDTOMapper extends DTOMapper<OffSiteUser, OffSiteUserDTO> {
+public interface OffSiteUserDTOMapper extends DTOMapper<OffSiteUser, OffSiteUserDTO> {
 }

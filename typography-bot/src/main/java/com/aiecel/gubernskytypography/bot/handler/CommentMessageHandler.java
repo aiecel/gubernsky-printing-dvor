@@ -5,7 +5,7 @@ import com.aiecel.gubernskytypography.bot.api.keyboard.Button;
 import com.aiecel.gubernskytypography.bot.api.keyboard.ButtonType;
 import com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard;
 import com.aiecel.gubernskytypography.bot.api.keyboard.KeyboardBuilder;
-import com.aiecel.gubernskytypography.bot.model.Cart;
+import com.aiecel.gubernskytypography.bot.model.OffSiteUser;
 import com.aiecel.gubernskytypography.bot.service.CartService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,6 @@ public class CommentMessageHandler extends AbstractMessageHandler {
 
     @Setter(onMethod_ = @Autowired)
     private CartMessageHandler cartMessageHandler;
-
-    @Setter
-    private Cart cart;
 
     public CommentMessageHandler() {
         this.commentBuilder = new StringBuilder();
@@ -90,8 +87,7 @@ public class CommentMessageHandler extends AbstractMessageHandler {
     }
 
     private BotMessage onActionAttach(Chat chat) {
-        cart.setComment(commentBuilder.toString());
-        cartService.save(cart);
+        cartService.attachCommentToCart((OffSiteUser) chat.getUser(), commentBuilder.toString());
 
         log.info("Redirecting user {} to CartMessageHandler", chat.getUser());
         chat.setMessageHandler(cartMessageHandler);

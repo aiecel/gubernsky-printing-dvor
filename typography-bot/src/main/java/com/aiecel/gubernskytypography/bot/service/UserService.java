@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<OffSiteUser> get(String username, String provider);
+
     OffSiteUser register(OffSiteUser user);
 }

@@ -26,4 +26,9 @@ public class CartProduct extends CartItem {
     public String getName() {
         return product.getName();
     }
+
+    @Override
+    public String toString() {
+        return product.getName() + " - " + getQuantity() + "шт.";
+    }
 }
