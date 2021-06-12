@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/feedbacks")
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class FeedbackController {
     private final FeedbackService feedbackService;
 
     @PostMapping("/send")
-    public FeedbackDTO sendFeedback(@RequestBody NewFeedbackDTO feedback) {
+    public FeedbackDTO sendFeedback(@RequestBody @Valid NewFeedbackDTO feedback) {
         return Mappers.getMapper(FeedbackDTOMapper.class).toDto(feedbackService.save(feedback));
     }
 }

@@ -144,7 +144,7 @@ public class VkBotService extends LongPollingBotService {
         OffSiteUser user = new OffSiteUser();
         user.setUsername(String.valueOf(vkMessage.getFromId()));
         user.setProvider(PROVIDER_NAME);
-        return new UserMessage(user, vkMessage.getText(), PROVIDER_NAME);
+        return new UserMessage(user, vkMessage.getText(), PROVIDER_NAME, vkMessage.getAttachments());
     }
 
     public Keyboard convertKeyboard(com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard keyboard) {

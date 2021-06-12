@@ -11,7 +11,7 @@ import java.net.URL;
 @Component
 public class FileDownloaderImpl implements FileDownloader {
     @Override
-    public byte[] download(URL url) throws FileDownloadException {
+    public byte[] download(URL url) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(url.openStream())) {
