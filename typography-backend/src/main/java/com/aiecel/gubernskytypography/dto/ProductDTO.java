@@ -1,18 +1,34 @@
 package com.aiecel.gubernskytypography.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Value;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Data
+@Value
 public class ProductDTO {
-    @NotNull
-    private final String name;
+    long id;
 
     @NotNull
-    private final String description;
+    String name;
 
     @NotNull
-    private final BigDecimal price;
+    String description;
+
+    @NotNull
+    BigDecimal price;
+
+    @JsonCreator
+
+    public ProductDTO(@JsonProperty("id") long id,
+                      @JsonProperty("name") String name,
+                      @JsonProperty("description") String description,
+                      @JsonProperty("price") BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 }

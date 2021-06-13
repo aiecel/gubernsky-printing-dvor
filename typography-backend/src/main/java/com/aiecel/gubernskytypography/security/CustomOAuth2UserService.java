@@ -1,14 +1,18 @@
 package com.aiecel.gubernskytypography.security;
 
 import com.aiecel.gubernskytypography.model.OffSiteUser;
+import com.aiecel.gubernskytypography.model.Role;
+import com.aiecel.gubernskytypography.model.UserRole;
 import com.aiecel.gubernskytypography.service.OffSiteUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,10 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return new CustomOAuth2User(user.getName(), user.getName(), clientRegistrationId, user.getAuthorities());
         });
 
-        OffSiteUser offSiteUser = new OffSiteUser();
-        offSiteUser.setUsername(oAuth2User.getUsername());
-        offSiteUser.setDisplayName(oAuth2User.getDisplayName());
-        offSiteUser.setRegistration(oAuth2User.getClientRegistrationId());
+        OffSiteUser offSiteUser = toOffSiteUser(oAuth2User);
 
         if (!offSiteUserService.exists(offSiteUser)) {
             offSiteUser = offSiteUserService.register(offSiteUser);
@@ -55,5 +56,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         return Optional.empty();
+    }
+
+    private OffSiteUser toOffSiteUser(CustomOAuth2User oAuth2User) {
+        OffSiteUser offSiteUser = new OffSiteUser();
+        offSiteUser.setUsername(oAuth2User.getUsername());
+        offSiteUser.setDisplayName(oAuth2User.getDisplayName());
+        offSiteUser.setRegistration(oAuth2User.getClientRegistrationId());
+
+        Set<UserRole> roles = new HashSet<>();
+        for (GrantedAuthority authority : oAuth2User.getAuthorities()) {
+            UserRole role = new UserRole();
+            role.setUser(offSiteUser);
+            role.setRole(Role.valueOf(authority.getAuthority()));
+            roles.add(role);
+        }
+        offSiteUser.setRoles(roles);
+        return offSiteUser;
     }
 }

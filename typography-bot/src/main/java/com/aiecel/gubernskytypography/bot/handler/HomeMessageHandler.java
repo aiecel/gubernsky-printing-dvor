@@ -8,7 +8,15 @@ import com.aiecel.gubernskytypography.bot.api.keyboard.Button;
 import com.aiecel.gubernskytypography.bot.api.keyboard.ButtonType;
 import com.aiecel.gubernskytypography.bot.api.keyboard.Keyboard;
 import com.aiecel.gubernskytypography.bot.api.keyboard.KeyboardBuilder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.stereotype.Component;
 
+@Component
+@Slf4j
 public class HomeMessageHandler extends AbstractMessageHandler {
     public static final String DEFAULT_MESSAGE =
             "Губернский Печатный Дворъ привѣтствуетъ тебя, засельщина земли Губернской! \n" +
@@ -27,9 +35,23 @@ public class HomeMessageHandler extends AbstractMessageHandler {
     public static final String ACTION_CHECK_ORDERS = "\uD83D\uDCBC Моя корреспонденция";
     public static final String ACTION_FEEDBACK = "\uD83D\uDCD6 Книга жалобъ";
 
+    @Getter
+    private final Keyboard keyboard;
+
+    @Setter(onMethod_ = @Autowired) //to avoid circular dependency
+    private CartMessageHandler cartMessageHandler;
+
+    public HomeMessageHandler() {
+        this.keyboard = new KeyboardBuilder()
+                .add(new Button(ACTION_ORDER, ButtonType.PRIMARY))
+                .add(new Button(ACTION_CHECK_ORDERS))
+                .add(new Button(ACTION_FEEDBACK))
+                .build();
+    }
+
     @Override
     public BotMessage getDefaultResponse(Chat chat) {
-        return new BotMessage(chat.getUser(), DEFAULT_MESSAGE, keyboard());
+        return new BotMessage(DEFAULT_MESSAGE, keyboard);
     }
 
     @Override
@@ -47,32 +69,26 @@ public class HomeMessageHandler extends AbstractMessageHandler {
         return getDefaultResponse(chat);
     }
 
-    public BotMessage onActionOrder(Chat chat) {
-        //todo change to order message handler
-        AbstractMessageHandler messageHandler = new TestMessageHandler();
-        chat.setMessageHandler(messageHandler);
-        return messageHandler.getDefaultResponse(chat);
+    @Lookup
+    public FeedbackMessageHandler getFeedbackMessageHandler() {
+        return null;
     }
 
-    public BotMessage onActionCheckOrders(Chat chat) {
+    private BotMessage onActionOrder(Chat chat) {
+        log.info("Redirecting user {} to CartMessageHandler", chat.getUser());
+        chat.setMessageHandler(cartMessageHandler);
+        return cartMessageHandler.getDefaultResponse(chat);
+    }
+
+    private BotMessage onActionCheckOrders(Chat chat) {
         //todo change behavior
-        AbstractMessageHandler messageHandler = new TestMessageHandler();
-        chat.setMessageHandler(messageHandler);
-        return messageHandler.getDefaultResponse(chat);
+        return getDefaultResponse(chat);
     }
 
     private BotMessage onActionFeedback(Chat chat) {
-        //todo change to feedback message handler
-        AbstractMessageHandler messageHandler = new TestMessageHandler();
-        chat.setMessageHandler(messageHandler);
-        return messageHandler.getDefaultResponse(chat);
-    }
-
-    public Keyboard keyboard() {
-        return new KeyboardBuilder()
-                .add(new Button(ACTION_ORDER, ButtonType.PRIMARY))
-                .add(new Button(ACTION_CHECK_ORDERS))
-                .add(new Button(ACTION_FEEDBACK))
-                .build();
+        log.info("Redirecting user {} to FeedbackMessageHandler", chat.getUser());
+        FeedbackMessageHandler feedbackMessageHandler = getFeedbackMessageHandler();
+        chat.setMessageHandler(feedbackMessageHandler);
+        return feedbackMessageHandler.getDefaultResponse(chat);
     }
 }

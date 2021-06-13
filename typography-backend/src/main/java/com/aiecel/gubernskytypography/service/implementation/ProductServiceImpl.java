@@ -1,12 +1,13 @@
 package com.aiecel.gubernskytypography.service.implementation;
 
 import com.aiecel.gubernskytypography.dto.ProductDTO;
-import com.aiecel.gubernskytypography.dto.mapper.ProductDTOMapper;
+import com.aiecel.gubernskytypography.dto.mapping.ProductDTOMapper;
 import com.aiecel.gubernskytypography.model.Page;
 import com.aiecel.gubernskytypography.model.Product;
 import com.aiecel.gubernskytypography.repository.PageRepository;
 import com.aiecel.gubernskytypography.repository.ProductRepository;
 import com.aiecel.gubernskytypography.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final PageRepository pageRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository, PageRepository pageRepository) {
-        this.productRepository = productRepository;
-        this.pageRepository = pageRepository;
-    }
 
     @Override
     public List<Product> getAll() {

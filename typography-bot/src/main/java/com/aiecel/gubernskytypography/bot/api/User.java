@@ -1,5 +1,6 @@
 package com.aiecel.gubernskytypography.bot.api;
 
 public interface User {
-    String getId();
+    String getUsername();
+    String getProvider();
 }

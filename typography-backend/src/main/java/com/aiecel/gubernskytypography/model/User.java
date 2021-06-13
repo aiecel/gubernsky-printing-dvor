@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +26,9 @@ public abstract class User {
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserRole> roles;
 
     @Override
     public String toString() {

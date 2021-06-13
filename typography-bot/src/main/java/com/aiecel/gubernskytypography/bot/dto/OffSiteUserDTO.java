@@ -1,13 +1,13 @@
 package com.aiecel.gubernskytypography.bot.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Value;
 
-@Getter
+@Value
 public class OffSiteUserDTO {
-    private final String username;
-    private final String displayName;
-    private final String registration;
+    String username;
+    String displayName;
+    String registration;
 
     public OffSiteUserDTO(@JsonProperty("username") String username,
                           @JsonProperty("displayName") String displayName,

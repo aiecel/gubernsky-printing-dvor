@@ -1,6 +1,5 @@
 package com.aiecel.gubernskytypography.service.implementation;
 
-import com.aiecel.gubernskytypography.exception.UserAlreadyExistsException;
 import com.aiecel.gubernskytypography.model.OffSiteUser;
 import com.aiecel.gubernskytypography.repository.OffSiteUserRepository;
 import com.aiecel.gubernskytypography.service.OffSiteUserService;
@@ -25,10 +24,11 @@ public class OffSiteUserServiceImpl implements OffSiteUserService {
 
     @Override
     public OffSiteUser register(OffSiteUser user) {
-        if (offSiteUserRepository.existsByUsernameAndRegistration(user.getUsername(), user.getRegistration())) {
-            throw new UserAlreadyExistsException("Can't register user " + user.getUsername() + ": user already exists");
-        }
-        log.info("New user registered: {}", user);
-        return offSiteUserRepository.save(user);
+        return offSiteUserRepository
+                .findByUsernameAndRegistration(user.getUsername(), user.getRegistration())
+                .orElseGet(() -> {
+                    log.info("New user registered: {}", user);
+                    return offSiteUserRepository.save(user);
+                });
     }
 }
