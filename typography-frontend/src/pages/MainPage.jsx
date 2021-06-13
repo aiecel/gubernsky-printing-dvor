@@ -1,10 +1,8 @@
-import React from 'react'
+import React from 'react';
 
-import {HomeContent} from "../components";
+import { HomeContent } from '../components';
 
-const MainPage = () => {
-    return (
-            <HomeContent/>
-    )
-}
+const MainPage = () => (
+  <HomeContent />
+);
 export default MainPage;

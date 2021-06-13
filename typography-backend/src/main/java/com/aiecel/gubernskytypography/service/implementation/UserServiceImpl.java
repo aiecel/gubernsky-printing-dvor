@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerFormDTO.getUsername());
         user.setDisplayName(registerFormDTO.getDisplayName());
         user.setEncryptedPassword(passwordEncoder.encode(registerFormDTO.getPassword()));
+        log.info("New user was registry {}", user);
 
         return Mappers.getMapper(UserDTOMapper.class).toDto(userRepository.save(user));
     }

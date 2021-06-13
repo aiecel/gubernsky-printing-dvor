@@ -1,13 +1,10 @@
 import React from 'react';
-import News from "../components/News";
+import News from '../components/News/News';
 
-const NewsPage = () => {
-
-    return (
-        <>
-            <News/>
-        </>
-    );
-};
+const NewsPage = () => (
+  <>
+    <News />
+  </>
+);
 
 export default NewsPage;
