@@ -1,14 +1,9 @@
 import React from 'react';
 
-import {FeedbackContainer} from "../components/Feedback";
+import { FeedbackContainer } from '../components/Feedback';
 
-const FeedbackPage = () => {
-    return (
-        <FeedbackContainer/>
-    );
-};
+const FeedbackPage = () => (
+  <FeedbackContainer />
+);
 
 export default FeedbackPage;
-
-
-

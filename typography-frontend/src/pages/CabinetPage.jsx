@@ -1,10 +1,8 @@
 import React from 'react';
-import {Cabinet} from "../components";
+import { Cabinet } from '../components';
 
-const CabinetPage = () => {
-    return (
-        <Cabinet />
-    );
-};
+const CabinetPage = () => (
+  <Cabinet />
+);
 
 export default CabinetPage;

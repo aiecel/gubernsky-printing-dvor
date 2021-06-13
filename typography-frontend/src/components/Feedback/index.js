@@ -1,7 +1,7 @@
-import FeedbackContainer from "./FeedbackContent";
-import FeedbackSuccess from "./FeedbackSuccess";
+import FeedbackContainer from './FeedbackContent';
+import FeedbackSuccess from './FeedbackSuccess';
 
-export  {
-    FeedbackContainer,
-    FeedbackSuccess
-}
+export {
+  FeedbackContainer,
+  FeedbackSuccess
+};

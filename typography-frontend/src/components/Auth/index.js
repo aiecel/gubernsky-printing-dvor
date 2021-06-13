@@ -1,5 +1,5 @@
-import SignUp from "./SignUp/SignUp";
+import SignUp from './SignUp/SignUp';
 
 export {
-    SignUp
-}
+  SignUp
+};
