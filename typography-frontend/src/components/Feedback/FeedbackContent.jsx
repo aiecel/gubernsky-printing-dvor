@@ -31,7 +31,7 @@ const FeedbackContainer = () => {
               return errors;
             }}
             onSubmit={(values, actions) => {
-              axios.post('http://localhost:3001/pizzas', {
+              axios.post('http://localhost:8080/feedbacks', {
                 data: values,
                 time: new Date().toLocaleString()
               })

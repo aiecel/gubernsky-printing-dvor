@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { Route, Switch } from 'react-router-dom';
 
@@ -9,9 +9,15 @@ import {
 import { NotFoundPage } from './common';
 
 function App() {
+    const [isAuth, setIsAuth] = useState(false);
   return (
     <>
-      <Header />
+      <Header
+          cabinetTitle={isAuth ? "Кабинет" : "Войти"}
+          signTitle={isAuth ? "Выход" : "Регистрация"}
+          cabinetLink={isAuth ? "/cabinet" : "/signIn"}
+          signLink={isAuth ? "/logout" : "signUp"}
+      />
       <Switch>
         <Route path="/" exact component={MainPage} />
         <Route path="/feedback" exact component={FeedbackPage} />

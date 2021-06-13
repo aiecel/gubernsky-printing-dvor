@@ -30,7 +30,7 @@
     flex-direction: column;
 }
 
-@media (max-width: 470px) {
+@media (max-width: 650px) {
     .feedback-header {
         padding-top: 12px;
         font-size: 30px;

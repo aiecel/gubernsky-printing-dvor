@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     'comma-dangle': ['warn', 'never'],
     'linebreak-style': 'off',
+    "react/prop-types": "off",
     'react/jsx-filename-extension': [
       'error',
       {

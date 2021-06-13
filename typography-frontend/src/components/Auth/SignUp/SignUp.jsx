@@ -18,11 +18,11 @@ const SignUp = () => {
           if (!values.username) {
               errors.username = 'Не бывает такого, чтоб имени не было у вас!';
           }
-          if (!values.displayName) {
-              errors.displayName = 'Не бывает такого, чтоб имени не было у вас!';
-          }
           if (values.username.length <= 3) {
               errors.username = 'Какое то невнятное имя... Попробуйте что-то поменять ';
+          }
+          if (!values.displayName) {
+              errors.displayName = 'Не бывает такого, чтоб имени не было у вас!';
           }
           if (values.displayName.length <= 3) {
               errors.displayName = 'Какое то невнятное имя... Попробуйте что-то поменять ';
@@ -39,8 +39,11 @@ const SignUp = () => {
           if (values.confirmPassword.length <= 3) {
             errors.confirmPassword = 'Коротковат будет! Придумайте что-то понадежнее';
           }
-          if (values.confirmPassword.length > 0 && values.password !== values.confirmPassword) {
+          if ((values.password.length && values.confirmPassword.length) && values.password !== values.confirmPassword) {
               errors.confirmPassword = 'Что-то не сходится! Протрите как очки да впечатайте всё повнимательнее'
+          }
+          if (!values.password && values.confirmPassword) {
+              errors.confirmPassword = 'Куда ж вы вперёд паровоза! Сначала пароль, потом повтор...'
           }
           return errors;
         }}
@@ -50,7 +53,7 @@ const SignUp = () => {
               console.log(response);
             }, (err) => {
               console.log(err);
-            }, history.push('feedbackSuccess'));
+            }, history.push('/'));
         }}
       >
         {() => (
