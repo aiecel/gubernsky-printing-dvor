@@ -1,15 +1,16 @@
-import Header from "./Header";
-import HomeContent from "./HomeContent";
-import FeedbackContent from "./FeedbackContent";
-import FeedbackSuccess from "./FeedbackSuccess";
-import SignUp from "./SignUp";
-import News from "./News";
+import {Header} from '../common/'
+import HomeContent from "./Main/HomeContent";
+import {FeedbackContainer, FeedbackSuccess} from './Feedback/'
+import {SignUp} from "./Auth/";
+import News from "./News/News";
+import Cabinet from "./Cabinet/Cabinet";
 
 export {
     Header,
     HomeContent,
-    FeedbackContent,
+    FeedbackContainer,
     FeedbackSuccess,
     SignUp,
-    News
+    News,
+    Cabinet
 }

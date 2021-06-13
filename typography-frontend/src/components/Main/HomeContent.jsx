@@ -2,8 +2,8 @@ import React from 'react'
 
 import {Link} from "react-router-dom";
 
-import machine from '../img/machine.jpg'
-import '../css/index.css'
+import machine from '../../img/machine.jpg'
+import './main.css'
 
 const HomeContent = () => {
     return (

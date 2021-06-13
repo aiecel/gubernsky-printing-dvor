@@ -6,7 +6,7 @@ const Header = () => {
 
     return (
         <>
-            <RBS.Navbar className="navbar navbar-expand-xl navbar-light" collapseOnSelect={true} bg="white" expand="lg">
+            <RBS.Navbar className="navbar navbar-expand-xl navbar-light" collapseOnSelect bg="white" expand="lg">
                 <LinkContainer to='/'><RBS.Navbar.Brand>Губернский Печатный Двор</RBS.Navbar.Brand></LinkContainer>
                 <RBS.Navbar.Toggle aria-controls="basicRBS.-navbar-nav"/>
                 <RBS.Navbar.Collapse id="basic-navbar-nav">
