@@ -15,6 +15,5 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class SiteUser extends User {
-    private String username;
     private String encryptedPassword;
 }
